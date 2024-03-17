@@ -1,0 +1,6 @@
+@RPGManager_HostAddress = http://localhost:5204
+
+GET {{RPGManager_HostAddress}}/api/Countries
+Accept: application/json
+
+###

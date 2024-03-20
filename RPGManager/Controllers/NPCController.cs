@@ -38,7 +38,7 @@ namespace RPGManager.Controllers
         {
             var npc = _context.NPCs
                 .Include(npc => npc.Country)
-                //.Include(npc => npc.Notes)
+                .Include(npc => npc.Notes)
                 .FirstOrDefault(npc => npc.Id == id);
             if (npc == null)
             {
@@ -47,7 +47,7 @@ namespace RPGManager.Controllers
             return npc;
         }
 
-        // adres PUT: api/Notes/id
+        // adres PUT: api/NPC/id
         [HttpPut("{id}")]
         public ActionResult UpdateNpc(int id, [FromBody] NPCDto npcDto)
         {

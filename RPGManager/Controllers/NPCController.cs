@@ -47,6 +47,27 @@ namespace RPGManager.Controllers
             return npc;
         }
 
+        // adres PUT: api/Notes/id
+        [HttpPut("{id}")]
+        public ActionResult UpdateNpc(int id, [FromBody] NPCDto npcDto)
+        {
+            var npc = _context.NPCs.Find(id);
+
+            if (npc == null)
+            {
+                return NotFound();
+            }
+
+            npc.Name = npcDto.Name;
+            npc.Description = npcDto.Description;
+            npc.CountryId = npcDto.CountryId;
+
+            _context.NPCs.Update(npc);
+            _context.SaveChanges();
+
+            return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
+        }
+
         //adres POST: api/NPCs
         [HttpPost]
         public ActionResult<NPC> PostNPC([FromBody] NPCDto npcDto)

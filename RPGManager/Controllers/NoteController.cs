@@ -50,6 +50,26 @@ namespace RPGManager.Controllers
             return CreatedAtAction(nameof(GetNoteById), new { id = note.Id }, note);
         }
 
+        // adres PUT: api/Notes/id
+        [HttpPut("{id}")]
+        public ActionResult UpdateNote(int id, [FromBody] NoteDto noteDto)
+        {
+            var note = _context.Notes.Find(id);
+
+            if (note == null)
+            {
+                return NotFound();
+            }
+            note.Title = noteDto.Title;
+            note.Text = noteDto.Text;
+            note.NPCId = noteDto.NPCId;
+
+            _context.Notes.Update(note);
+            _context.SaveChanges();
+
+            return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
+        }
+
         //adres DELETE: api/Notes/5
         [HttpDelete("{id}")]
         public IActionResult DeleteNote(int id)

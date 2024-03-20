@@ -68,6 +68,27 @@ namespace RPGManager.Controllers
             return CreatedAtAction(nameof(GetCountry), new { id = country.Id }, country); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
         }
 
+        // adres PUT: api/Countries/id
+        [HttpPut("{id}")]
+        public ActionResult UpdateCountry(int id, [FromBody] CountryDto countryDto)
+        {
+            var country = _context.Countries.Find(id);
+
+            if (country == null)
+            {
+                return NotFound();
+            }
+
+            country.Name = countryDto.Name;
+            country.Capital = countryDto.Capital;
+
+            _context.Countries.Update(country);
+            _context.SaveChanges();
+
+            return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
+        }
+
+
         // adres DELETE: api/Countries/id
         [HttpDelete("{id}")]
         public ActionResult<Country> DeleteCountry(int id)

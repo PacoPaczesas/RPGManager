@@ -17,10 +17,6 @@ namespace RPGManager.Services
                 _context = context;
             }
 
-
-
-
-
             public IEnumerable<Country> GetCountries()
             {
                 return _context.Countries.OrderBy(c => c.Id).ToList();
@@ -30,7 +26,6 @@ namespace RPGManager.Services
             {
                 return _context.Countries.FirstOrDefault(c => c.Id == id);
             }
-
 
         public Country AddCountry(CountryDto countryDto)
         {
@@ -66,8 +61,6 @@ namespace RPGManager.Services
             _context.Countries.Remove(country);
             _context.SaveChanges();
         }
-
-
 
     }
 

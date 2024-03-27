@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RPGManager.Data;
 using RPGManager.Dtos;
 using RPGManager.Models;
+using RPGManager.Services.Interfaces;
 
 namespace RPGManager.Controllers
 {
@@ -10,21 +11,26 @@ namespace RPGManager.Controllers
     [ApiController]
     public class NPCsController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly INPCService _npcService;
 
-        public NPCsController(DataContext context)
+        public NPCsController (INPCService npcService)
         {
-            _context = context;
+            _npcService = npcService;
         }
+
+        /*        private readonly DataContext _context;
+
+                public NPCsController(DataContext context)
+                {
+                    _context = context;
+                }*/
+
 
         //adres GET: api/NPCs
         [HttpGet]
         public ActionResult<IEnumerable<NPC>> GetNPCs()
         {
-            var npcs = _context.NPCs
-                .Include(npc => npc.Country)
-                //.Include(npc => npc.Notes) TODO nie działa zwracanie przypisanych notatek
-                .OrderBy(npc => npc.Id).ToList();
+            var npcs = _npcService.GetNPCs();
             if (npcs == null)
             {
                 return NotFound(); // Zwraca błąd 404 jeżeli lista Country jest pusta
@@ -36,10 +42,7 @@ namespace RPGManager.Controllers
         [HttpGet("{id}")]
         public ActionResult<NPC> GetNPC(int id)
         {
-            var npc = _context.NPCs
-                .Include(npc => npc.Country)
-                .Include(npc => npc.Notes)
-                .FirstOrDefault(npc => npc.Id == id);
+            var npc = _npcService.GetNPC(id);
             if (npc == null)
             {
                 return NotFound();
@@ -47,58 +50,39 @@ namespace RPGManager.Controllers
             return npc;
         }
 
+        //adres POST: api/NPCs
+        [HttpPost]
+        public ActionResult<NPC> PostNPC([FromBody] NPCDto npcDto)
+        {
+            var npc = _npcService.AddNPC(npcDto);
+            return CreatedAtAction(nameof(GetNPC), new { id = npc.Id }, npc);
+        }
+
         // adres PUT: api/NPC/id
         [HttpPut("{id}")]
         public ActionResult UpdateNpc(int id, [FromBody] NPCDto npcDto)
         {
-            var npc = _context.NPCs.Find(id);
+            var npc = _npcService.UpdateNPC(id, npcDto);
 
             if (npc == null)
             {
                 return NotFound();
             }
-
-            npc.Name = npcDto.Name;
-            npc.Description = npcDto.Description;
-            npc.CountryId = npcDto.CountryId;
-
-            _context.NPCs.Update(npc);
-            _context.SaveChanges();
-
             return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
-        }
-
-        //adres POST: api/NPCs
-        [HttpPost]
-        public ActionResult<NPC> PostNPC([FromBody] NPCDto npcDto)
-        {
-            var npc = new NPC
-            {
-                Name = npcDto.Name,
-                Description = npcDto.Description,
-                CountryId = npcDto.CountryId
-            };
-
-            _context.NPCs.Add(npc);
-            _context.SaveChanges();
-
-            return CreatedAtAction(nameof(GetNPC), new { id = npc.Id }, npc);
         }
 
         //adres DELETE: api/NPCs/id
         [HttpDelete("{id}")]
         public IActionResult DeleteNPC(int id)
         {
-            var npc = _context.NPCs.Find(id);
+            var npc = _npcService.DeleteNPC(id);
             if (npc == null)
             {
                 return NotFound();
             }
 
-            _context.NPCs.Remove(npc);
-            _context.SaveChanges();
-
             return NoContent();
         }
+
     }
 }

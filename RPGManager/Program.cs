@@ -16,6 +16,7 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<INPCService, NPCService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {

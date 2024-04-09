@@ -18,14 +18,6 @@ namespace RPGManager.Controllers
             _npcService = npcService;
         }
 
-        /*        private readonly DataContext _context;
-
-                public NPCsController(DataContext context)
-                {
-                    _context = context;
-                }*/
-
-
         //adres GET: api/NPCs
         [HttpGet]
         public ActionResult<IEnumerable<NPC>> GetNPCs()
@@ -55,6 +47,10 @@ namespace RPGManager.Controllers
         public ActionResult<NPC> PostNPC([FromBody] NPCDto npcDto)
         {
             var npc = _npcService.AddNPC(npcDto);
+            if (npc == null)
+            {
+                return BadRequest();
+            }
             return CreatedAtAction(nameof(GetNPC), new { id = npc.Id }, npc);
         }
 

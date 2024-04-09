@@ -19,6 +19,7 @@ namespace RPGManager.Controllers
         {
             _countryService = countryService;
         }
+
         // adres GET api/Countries
         [HttpGet]
         public ActionResult<IEnumerable<Country>> GetCountries()

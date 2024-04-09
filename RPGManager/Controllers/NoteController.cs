@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RPGManager.Data;
 using RPGManager.Dtos;
 using RPGManager.Models;
+using RPGManager.Services.Interfaces;
 using System.Linq;
 
 namespace RPGManager.Controllers
@@ -10,43 +12,34 @@ namespace RPGManager.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly INoteService _noteService;
 
-        public NotesController(DataContext context)
+        public NotesController(INoteService noteService)
         {
-            _context = context;
+            _noteService = noteService;
         }
 
-        // tutaj nie mam wyświetlania wszystkich notatak gdyż chciałbym, aby były one wyświetlane przy odpowiednim NPC. Nad tym jeszcze pracuję.
 
         //adres GET: api/Notes/5
         [HttpGet("{id}")]
         public ActionResult<Note> GetNoteById(int id)
         {
-            var note = _context.Notes.Find(id);
+            var note = _noteService.GetNote(id);
 
             if (note == null)
             {
                 return NotFound();
             }
 
-            return note;
+            return Ok(note);
         }
 
         //adres POST: api/Notes
         [HttpPost]
         public ActionResult<Note> CreateNote([FromBody] NoteDto noteDto)
         {
-            var note = new Note
-            {
-                Title = noteDto.Title,
-                Text = noteDto.Text,
-                NPCId = noteDto.NPCId
-            };
-
-            _context.Notes.Add(note);
-            _context.SaveChanges();
-
+            var note = _noteService.AddNote(noteDto);
+ 
             return CreatedAtAction(nameof(GetNoteById), new { id = note.Id }, note);
         }
 
@@ -54,19 +47,11 @@ namespace RPGManager.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateNote(int id, [FromBody] NoteDto noteDto)
         {
-            var note = _context.Notes.Find(id);
-
+            var note = _noteService.UpdateNote(id, noteDto);
             if (note == null)
             {
                 return NotFound();
             }
-            note.Title = noteDto.Title;
-            note.Text = noteDto.Text;
-            note.NPCId = noteDto.NPCId;
-
-            _context.Notes.Update(note);
-            _context.SaveChanges();
-
             return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
         }
 
@@ -74,16 +59,14 @@ namespace RPGManager.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteNote(int id)
         {
-            var note = _context.Notes.Find(id);
+            var note = _noteService.DeleteNote(id);
             if (note == null)
             {
                 return NotFound();
             }
-
-            _context.Notes.Remove(note);
-            _context.SaveChanges();
-
             return NoContent();
         }
+
+
     }
 }

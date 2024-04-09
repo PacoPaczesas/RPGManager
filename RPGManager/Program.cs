@@ -15,15 +15,15 @@ builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ICountryService, CountryService>();
-builder.Services.AddScoped<INPCService, NPCService>();
+builder.Services.AddTransient<ICountryService, CountryService>();
+builder.Services.AddTransient<INPCDataValidationService, NPCDataValidationService>();
+builder.Services.AddTransient<INPCService, NPCService>();
+builder.Services.AddTransient<INoteService, NoteService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
-
 
 var app = builder.Build();
 

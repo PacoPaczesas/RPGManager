@@ -9,10 +9,12 @@ namespace RPGManager.Services
     public class NPCService : INPCService
     {
         private readonly DataContext _context;
+        private readonly INPCDataValidationService _NPCDataValidationService;
 
-        public NPCService(DataContext context)
+        public NPCService(DataContext context, INPCDataValidationService NPCDataValidationService)
         {
             _context = context;
+            _NPCDataValidationService = NPCDataValidationService;
         }
 
         public IEnumerable<NPC> GetNPCs()
@@ -34,17 +36,28 @@ namespace RPGManager.Services
 
         public NPC AddNPC(NPCDto npcDto)
         {
-            var npc = new NPC
+            bool NPCDataValidation = _NPCDataValidationService.NPCDataValidation(npcDto);
+
+            if (NPCDataValidation)
             {
-                Name = npcDto.Name,
-                Description = npcDto.Description,
-                CountryId = npcDto.CountryId
-            };
+                var npc = new NPC
+                {
+                    Name = npcDto.Name,
+                    Description = npcDto.Description,
+                    CountryId = npcDto.CountryId,
+                    Strength = npcDto.Strength,
+                    Might = npcDto.Might,
+                    AC = npcDto.AC,
+                    Exp = npcDto.Exp,
+                    Lvl = _NPCDataValidationService.NPCLvlAssign(npcDto),
+                };
 
-            _context.NPCs.Add(npc);
-            _context.SaveChanges();
+                _context.NPCs.Add(npc);
+                _context.SaveChanges();
 
-            return npc;
+                return npc;
+            }
+            return null;
         }
 
         public NPC UpdateNPC(int id, NPCDto npcDto)

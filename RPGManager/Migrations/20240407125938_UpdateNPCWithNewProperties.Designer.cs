@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RPGManager.Data;
 
@@ -10,9 +11,11 @@ using RPGManager.Data;
 namespace RPGManager.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240407125938_UpdateNPCWithNewProperties")]
+    partial class UpdateNPCWithNewProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,17 +69,14 @@ namespace RPGManager.Migrations
                     b.Property<int>("HP")
                         .HasColumnType("int");
 
-                    b.Property<int>("Lvl")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Might")
+                    b.Property<int>("Moc")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Strength")
+                    b.Property<int>("Sila")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

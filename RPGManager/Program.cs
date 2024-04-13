@@ -16,7 +16,7 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ICountryService, CountryService>();
-builder.Services.AddTransient<INPCDataValidationService, NPCDataValidationService>();
+//builder.Services.AddTransient<INPCValidator, NPCDataValidationService>();
 builder.Services.AddTransient<INPCService, NPCService>();
 builder.Services.AddTransient<INoteService, NoteService>();
 

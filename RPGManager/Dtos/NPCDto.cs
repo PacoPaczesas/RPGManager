@@ -11,9 +11,6 @@ namespace RPGManager.Dtos
         int Strength,
         [Range(1, int.MaxValue, ErrorMessage = "Moc musi być wyższa niż 0")]
         int Might,
-        [Range(1, int.MaxValue, ErrorMessage = "HP musi być wyższe niż 0")]
-        int HP,
-        int AC,
         [Range(0, int.MaxValue, ErrorMessage = "Epx jest wymagany i musi wynosić co najmniej 0")]
         int Exp);
 }

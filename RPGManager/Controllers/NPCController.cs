@@ -44,14 +44,15 @@ namespace RPGManager.Controllers
 
         //adres POST: api/NPCs
         [HttpPost]
-        public ActionResult<NPC> PostNPC([FromBody] NPCDto npcDto)
+        public ActionResult<(NPC, Validator)> PostNPC([FromBody] NPCDto npcDto)
         {
-            var npc = _npcService.AddNPC(npcDto);
-            if (npc == null)
+            var result = _npcService.AddNPC(npcDto);
+
+            if (result.Item1 == null)
             {
-                return BadRequest();
+                return BadRequest(result.Item2.Message);
             }
-            return CreatedAtAction(nameof(GetNPC), new { id = npc.Id }, npc);
+            return CreatedAtAction(nameof(GetNPC), new { id = result.Item1.Id }, result.Item1);
         }
 
         // adres PUT: api/NPC/id

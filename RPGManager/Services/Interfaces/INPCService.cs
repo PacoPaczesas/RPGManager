@@ -8,7 +8,7 @@ namespace RPGManager.Services.Interfaces
     {
         IEnumerable<NPC> GetNPCs();
         NPC GetNPC(int id);
-        NPC AddNPC(NPCDto npcDto);
+        (NPC, Validator) AddNPC(NPCDto npcDto);
         NPC UpdateNPC(int id, NPCDto npcDto);
         NPC DeleteNPC(int id);
     }

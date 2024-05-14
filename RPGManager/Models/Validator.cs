@@ -1,6 +1,7 @@
 ﻿
 namespace RPGManager.Models
 {
+    //ValidateResult
     public class Validator
     {
         public bool IsValid;

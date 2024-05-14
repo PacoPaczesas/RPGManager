@@ -5,18 +5,19 @@ using RPGManager.Models;
 using RPGManager.Services.Interfaces;
 //using NowaKlasa = RPGManager.NowaKlasa2;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using RPGManager.Validators;
 
 namespace RPGManager.Services
 {
     public class NPCService : INPCService
     {
         private readonly DataContext _context;
+        private readonly IValidator<NPC> _NPCValidator;
 
-
-        public NPCService(DataContext context)
+        public NPCService(DataContext context, IValidator<NPC> NPCValidator)
         {
             _context = context;
-
+            _NPCValidator = NPCValidator;
         }
 
         public IEnumerable<NPC> GetNPCs()
@@ -36,6 +37,7 @@ namespace RPGManager.Services
             return npc;
         }
 
+        // można nazwać public (NPC NAZWA, ValidatorResult NAZWA) AddNPC(NPCDto npcDto)
         public (NPC, Validator) AddNPC(NPCDto npcDto)
         {
             Validator NPCvalidator = new Validator();
@@ -47,7 +49,7 @@ namespace RPGManager.Services
                 CountryId = npcDto.CountryId,
             };
 
-            NPCvalidator = npc.Validate();
+            NPCvalidator = _NPCValidator.Validate(npc);
 
             if (NPCvalidator.IsValid)
             {         

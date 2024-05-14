@@ -60,6 +60,7 @@ namespace RPGManager.Models
         }
 
         // potrzebne jest wcześniejsze utworzenie obiektu klasy walidator, który można gdzieś zapisać po zwróceniu returnem.
+        // PYTANIE czy muszę tutaj jeszcze zabezpieczać się przed brakiem takich danych jak MOC i SIŁA, które są wymagane w konstruktorze? Z tego względi, że są w konstruktorze chyba nie.
         public Validator Validate()
         {
             Validator validator = new Validator();

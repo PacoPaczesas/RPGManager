@@ -46,14 +46,31 @@ namespace RPGManager.Controllers
             return country;
         }
 
+        /*        // adres POST: api/Countries
+                [HttpPost]
+                public ActionResult<Country> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
+                {
+                    var country = _countryService.AddCountry(countryDto);
+                    return CreatedAtAction(nameof(GetCountry), new { id = country.Id }, country); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
+                }*/
+
         // adres POST: api/Countries
         [HttpPost]
-        public ActionResult<Country> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
+        public ActionResult<(Country, Validator)> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
         {
-            var country = _countryService.AddCountry(countryDto);
-            return CreatedAtAction(nameof(GetCountry), new { id = country.Id }, country); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
+
+            var result = _countryService.AddCountry(countryDto);
+
+            if (result.Item1 == null)
+            {
+                return BadRequest(result.Item2.Message);
+            }
+
+            return CreatedAtAction(nameof(GetCountry), new { id = result.Item1.Id }, result); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
         }
-        
+
+
+
         // adres PUT: api/Countries/id
         [HttpPut("{id}")]
         public ActionResult UpdateCountry(int id, [FromBody] CountryDto countryDto)

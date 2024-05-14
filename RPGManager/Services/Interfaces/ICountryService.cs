@@ -9,7 +9,7 @@ namespace RPGManager.Services.Interfaces
     {
         IEnumerable<Country> GetCountries();
         Country GetCountry(int id);
-        Country AddCountry(CountryDto countryDto);
+        (Country, Validator) AddCountry(CountryDto countryDto);
         void UpdateCountry(int id, CountryDto countryDto);
         void DeleteCountry(int id);
     }

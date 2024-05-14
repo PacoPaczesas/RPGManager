@@ -38,6 +38,7 @@ namespace RPGManager.Services
         }
 
         // można nazwać public (NPC NAZWA, ValidatorResult NAZWA) AddNPC(NPCDto npcDto)
+
         public (NPC, Validator) AddNPC(NPCDto npcDto)
         {
             Validator NPCvalidator = new Validator();

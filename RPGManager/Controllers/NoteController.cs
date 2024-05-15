@@ -36,11 +36,16 @@ namespace RPGManager.Controllers
 
         //adres POST: api/Notes
         [HttpPost]
-        public ActionResult<Note> CreateNote([FromBody] NoteDto noteDto)
+        public ActionResult<(Note, Validator)> CreateNote([FromBody] NoteDto noteDto)
         {
-            var note = _noteService.AddNote(noteDto);
+            var result = _noteService.AddNote(noteDto);
+
+            if (result.Item1 == null)
+            {
+                return BadRequest(result.Item2.Message);
+            }
  
-            return CreatedAtAction(nameof(GetNoteById), new { id = note.Id }, note);
+            return CreatedAtAction(nameof(GetNoteById), new { id = result.Item1.Id }, result.Item1);
         }
 
         // adres PUT: api/Notes/id

@@ -2,6 +2,7 @@
 using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
+using RPGManager.Validators;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace RPGManager.Services
@@ -9,10 +10,12 @@ namespace RPGManager.Services
     public class NoteService : INoteService
     {
         private readonly DataContext _context;
+        private readonly IValidator<Note> _NoteValidator;
 
-        public NoteService(DataContext context)
+        public NoteService(DataContext context, IValidator<Note> noteValidator)
         {
             _context = context;
+            _NoteValidator = noteValidator;
         }
 
         public Note GetNote(int id)
@@ -26,8 +29,10 @@ namespace RPGManager.Services
             return note;
         }
 
-        public Note AddNote(NoteDto noteDto)
+        public (Note, Validator) AddNote(NoteDto noteDto)
         {
+            Validator NoteValidator = new Validator();
+
             var note = new Note
             {
                 Title = noteDto.Title,
@@ -35,10 +40,15 @@ namespace RPGManager.Services
                 NPCId = noteDto.NPCId
             };
 
-            _context.Notes.Add(note);
-            _context.SaveChanges();
+            NoteValidator = _NoteValidator.Validate(note);
+            if(NoteValidator.IsValid)
+            {
+                _context.Notes.Add(note);
+                _context.SaveChanges();
+                return (note, null);
+            }
 
-            return note;
+            return (null, NoteValidator);
         }
 
         public Note UpdateNote (int id, NoteDto noteDto)

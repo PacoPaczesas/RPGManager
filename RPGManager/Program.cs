@@ -23,6 +23,7 @@ builder.Services.AddTransient<INPCService, NPCService>();
 builder.Services.AddTransient<INoteService, NoteService>();
 builder.Services.AddTransient<IValidator<NPC>, NPCValidator>();
 builder.Services.AddTransient<IValidator<Country>, CountryValidator>();
+builder.Services.AddTransient<IValidator<Note>, NoteValidator>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {

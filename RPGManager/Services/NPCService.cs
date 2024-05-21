@@ -97,6 +97,40 @@ namespace RPGManager.Services
             return npc;
         }
 
+        public ValidatorResult<NPC> Attack(int attackerId, int defenderId)
+        {
+            ValidatorResult<NPC> AttackValidator = new ValidatorResult<NPC>();
+            AttackValidator.IsCompleate = true;
+            AttackValidator.Message = "ok";
+            AttackValidator.obj = null;
+
+            var attacker = _context.NPCs.Find(attackerId);
+            var defender = _context.NPCs.Find(defenderId);
+
+            if (attacker == null || defender == null)
+            {
+                AttackValidator.IsCompleate = false;
+                AttackValidator.Message = "Wprowadzono błędne ID. Co najmniej jeden z NPC o wprowadzonych ID nie istnieje";
+                return AttackValidator;
+            }
+
+
+            int attackPower = attacker.AttackPower();
+            if (attackPower > defender.AC)
+            {
+                defender.CurrentHP -= attackPower;
+                attacker.Exp += 5;
+                attacker.AssignLvl();
+                AttackValidator.Message = "Sukces. Atakujący wykonał atak i zadał obrażenia";
+
+                _context.NPCs.Update(attacker);
+                _context.SaveChanges();
+                return AttackValidator;
+            }
+
+            AttackValidator.Message = "Atak się nie udał";
+            return AttackValidator;
+        }
 
 
     }

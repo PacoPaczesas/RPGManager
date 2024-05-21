@@ -13,6 +13,7 @@ namespace RPGManager.Models
             AssignLvl();
             AssignHp();
             AssignAC();
+            ResetCurrentHP();
         }
 
 
@@ -25,6 +26,7 @@ namespace RPGManager.Models
         public int Strength {  get; set; }
         public int Might {  get; set; }
         public int HP { get; set;}
+        public int CurrentHP { get; set; }
         public int AC { get; set;}
         public int Exp { get; set; }
         public int Lvl { get; set; }
@@ -57,8 +59,20 @@ namespace RPGManager.Models
 
         public void AssignAC()
         {
-            AC = Strength * 2 + Lvl * 5;
+            AC = Strength + Lvl;
         }
+
+        public void ResetCurrentHP()
+        {
+            CurrentHP = HP;
+        }
+
+        public int AttackPower()
+        {
+            Random random = new Random();
+            return Strength + Lvl + random.Next(1, Strength);
+        }
+
 
         // potrzebne jest wcześniejsze utworzenie obiektu klasy walidator, który można gdzieś zapisać po zwróceniu returnem.
         // PYTANIE czy muszę tutaj jeszcze zabezpieczać się przed brakiem takich danych jak MOC i SIŁA, które są wymagane w konstruktorze? Z tego względi, że są w konstruktorze chyba nie.

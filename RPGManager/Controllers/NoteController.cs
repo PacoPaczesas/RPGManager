@@ -37,13 +37,10 @@ namespace RPGManager.Controllers
 
         //adres POST: api/Notes
         [HttpPost]
-        //public ActionResult<(Note, Validator)> CreateNote([FromBody] NoteDto noteDto)
         public ActionResult <ValidatorResult<Note>> CreateNote([FromBody] NoteDto noteDto)
         {
             ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
             NoteValidator = _noteService.AddNote(noteDto);
-
-            //var result = _noteService.AddNote(noteDto);
 
             if (!NoteValidator.IsCompleate)
             {

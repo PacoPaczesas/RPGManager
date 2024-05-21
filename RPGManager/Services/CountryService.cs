@@ -31,9 +31,9 @@ namespace RPGManager.Services
             }
 
 
-        public (Country, Validator) AddCountry(CountryDto countryDto)
+        public ValidatorResult<Country> AddCountry(CountryDto countryDto)
         {
-            Validator CountryValidator = new Validator();
+            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
 
             var country = new Country()
             {
@@ -43,14 +43,14 @@ namespace RPGManager.Services
 
             CountryValidator = _CountryValidator.Validate(country);
 
-            if (CountryValidator.IsValid)
+            if (CountryValidator.IsCompleate)
             {
                 _context.Countries.Add(country);
                 _context.SaveChanges();
 
-                return (country, null);
+                return (CountryValidator);
             }
-            return (null, CountryValidator);
+            return (CountryValidator);
         }
 
 

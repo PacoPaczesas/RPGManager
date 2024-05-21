@@ -46,27 +46,20 @@ namespace RPGManager.Controllers
             return country;
         }
 
-        /*        // adres POST: api/Countries
-                [HttpPost]
-                public ActionResult<Country> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
-                {
-                    var country = _countryService.AddCountry(countryDto);
-                    return CreatedAtAction(nameof(GetCountry), new { id = country.Id }, country); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
-                }*/
 
         // adres POST: api/Countries
         [HttpPost]
-        public ActionResult<(Country, Validator)> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
+        public ActionResult<ValidatorResult<Country>> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
         {
+            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
+            CountryValidator = _countryService.AddCountry(countryDto);
 
-            var result = _countryService.AddCountry(countryDto);
-
-            if (result.Item1 == null)
+            if (!CountryValidator.IsCompleate)
             {
-                return BadRequest(result.Item2.Message);
+                return BadRequest(CountryValidator.Message);
             }
 
-            return CreatedAtAction(nameof(GetCountry), new { id = result.Item1.Id }, result); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
+            return CreatedAtAction(nameof(GetCountry), new { id = CountryValidator.obj.Id }, CountryValidator.obj); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
         }
 
 

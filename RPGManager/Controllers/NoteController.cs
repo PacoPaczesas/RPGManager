@@ -4,6 +4,7 @@ using RPGManager.Data;
 using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace RPGManager.Controllers
@@ -36,16 +37,20 @@ namespace RPGManager.Controllers
 
         //adres POST: api/Notes
         [HttpPost]
-        public ActionResult<(Note, Validator)> CreateNote([FromBody] NoteDto noteDto)
+        //public ActionResult<(Note, Validator)> CreateNote([FromBody] NoteDto noteDto)
+        public ActionResult <ValidatorResult<Note>> CreateNote([FromBody] NoteDto noteDto)
         {
-            var result = _noteService.AddNote(noteDto);
+            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
+            NoteValidator = _noteService.AddNote(noteDto);
 
-            if (result.Item1 == null)
+            //var result = _noteService.AddNote(noteDto);
+
+            if (!NoteValidator.IsCompleate)
             {
-                return BadRequest(result.Item2.Message);
+                return BadRequest(NoteValidator.Message);
             }
  
-            return CreatedAtAction(nameof(GetNoteById), new { id = result.Item1.Id }, result.Item1);
+            return CreatedAtAction(nameof(GetNoteById), new { id = NoteValidator.obj.Id }, NoteValidator.obj);
         }
 
         // adres PUT: api/Notes/id

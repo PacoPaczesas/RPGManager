@@ -1,10 +1,11 @@
 ﻿
 namespace RPGManager.Models
 {
-    //ValidateResult
-    public class Validator
+
+    public class ValidatorResult<T>
     {
-        public bool IsValid;
+        public bool IsCompleate;
         public string Message;
+        public T obj;
     }
 }

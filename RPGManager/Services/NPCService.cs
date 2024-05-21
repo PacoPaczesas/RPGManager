@@ -6,6 +6,7 @@ using RPGManager.Services.Interfaces;
 //using NowaKlasa = RPGManager.NowaKlasa2;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using RPGManager.Validators;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPGManager.Services
 {
@@ -39,9 +40,9 @@ namespace RPGManager.Services
 
         // można nazwać public (NPC NAZWA, ValidatorResult NAZWA) AddNPC(NPCDto npcDto)
 
-        public (NPC, Validator) AddNPC(NPCDto npcDto)
+        public ValidatorResult<NPC> AddNPC(NPCDto npcDto)
         {
-            Validator NPCvalidator = new Validator();
+            ValidatorResult<NPC> NPCvalidator = new ValidatorResult<NPC>();
 
             var npc = new NPC(npcDto.Exp, npcDto.Strength, npcDto.Might)
             {
@@ -52,14 +53,14 @@ namespace RPGManager.Services
 
             NPCvalidator = _NPCValidator.Validate(npc);
 
-            if (NPCvalidator.IsValid)
+            if (NPCvalidator.IsCompleate)
             {         
                 _context.NPCs.Add(npc);
                 _context.SaveChanges();
 
-                return (npc, null);
+                return (NPCvalidator);
             }
-            return (null, NPCvalidator);
+            return (NPCvalidator);
         }
 
         public NPC UpdateNPC(int id, NPCDto npcDto)

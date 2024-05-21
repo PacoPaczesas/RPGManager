@@ -3,6 +3,7 @@ using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
 using RPGManager.Validators;
+using System.ComponentModel.DataAnnotations;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace RPGManager.Services
@@ -29,9 +30,9 @@ namespace RPGManager.Services
             return note;
         }
 
-        public (Note, Validator) AddNote(NoteDto noteDto)
+        public ValidatorResult<Note> AddNote(NoteDto noteDto)
         {
-            Validator NoteValidator = new Validator();
+            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
 
             var note = new Note
             {
@@ -41,14 +42,14 @@ namespace RPGManager.Services
             };
 
             NoteValidator = _NoteValidator.Validate(note);
-            if(NoteValidator.IsValid)
+            if(NoteValidator.IsCompleate)
             {
                 _context.Notes.Add(note);
                 _context.SaveChanges();
-                return (note, null);
+                return (NoteValidator);
             }
 
-            return (null, NoteValidator);
+            return (NoteValidator);
         }
 
         public Note UpdateNote (int id, NoteDto noteDto)

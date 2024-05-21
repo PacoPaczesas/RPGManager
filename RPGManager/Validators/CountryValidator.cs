@@ -9,27 +9,29 @@ namespace RPGManager.Validators
     /// </summary>
     public class CountryValidator : IValidator<Country>
     {
-        public Validator Validate(Country country)
+        public ValidatorResult<Country> Validate(Country country)
         {
-            Validator validator = new Validator();
-            validator.IsValid = true;
-            validator.Message = "ok";
+            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
+            //Validator validator = new Validator();
+            CountryValidator.IsCompleate = true;
+            CountryValidator.Message = "ok";
+            CountryValidator.obj = country;
 
             //validuje nazwe
             if (country.Name.Length < 1) 
             {
-                validator.IsValid = false;
-                validator.Message = "Brak wprowadzonej nazwy kraju";
+                CountryValidator.IsCompleate = false;
+                CountryValidator.Message = "Brak wprowadzonej nazwy kraju";
             }
 
             //validuje stolice
             if (country.Capital == null)
             {
-                validator.IsValid = false;
-                validator.Message = "Brak wprowadzonej nazwy stolicy kraju";
+                CountryValidator.IsCompleate = false;
+                CountryValidator.Message = "Brak wprowadzonej nazwy stolicy kraju";
             }
 
-            return validator;
+            return CountryValidator;
         }
 
     }

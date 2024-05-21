@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RPGManager.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPGManager.Validators
 {
     public interface IValidator <T>
     {
-        Validator Validate(T obj);
+        ValidatorResult<T> Validate(T obj);
     }
 }

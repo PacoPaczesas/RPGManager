@@ -126,9 +126,8 @@ namespace RPGManager.Services
             int attackPower = attacker.AttackPower();
             if (attackPower > defender.AC)
             {
-                defender.CurrentHP -= attackPower;
-                attacker.Exp += 5;
-                attacker.AssignLvl();
+                defender.minusHp(attackPower);
+                attacker.addExp(5);
                 AttackValidator.Message = "Sukces. Atakujący wykonał atak i zadał obrażenia";
 
                 _context.NPCs.Update(attacker);

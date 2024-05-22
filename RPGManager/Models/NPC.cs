@@ -31,6 +31,25 @@ namespace RPGManager.Models
         public int Exp { get; set; }
         public int Lvl { get; set; }
 
+        public void minusHp(int minus)
+        {
+            CurrentHP -= minus;
+
+            if (CurrentHP > HP)
+            {
+                CurrentHP = HP;
+            }
+            if (CurrentHP < 0)
+            {
+                CurrentHP = 0;
+            }
+        }
+        public void addExp(int value)
+        {
+            Exp += value;
+            AssignLvl();
+        }
+
 
         public void AssignLvl()
         {

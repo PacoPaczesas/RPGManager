@@ -1,4 +1,4 @@
-﻿namespace nowaSolucja
+﻿namespace WarstwaWprowadzania
 {
     public class Class1
     {

@@ -29,7 +29,7 @@ namespace RPGManager.Controllers
 
             if (note == null)
             {
-                return NotFound();
+                return NotFound("Notataka o danym Id nie istnieje");
             }
 
             return Ok(note);
@@ -54,12 +54,13 @@ namespace RPGManager.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateNote(int id, [FromBody] NoteDto noteDto)
         {
-            var note = _noteService.UpdateNote(id, noteDto);
-            if (note == null)
+            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
+            NoteValidator = _noteService.UpdateNote(id, noteDto);
+            if (!NoteValidator.IsCompleate)
             {
-                return NotFound();
+                return BadRequest(NoteValidator.Message);
             }
-            return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
+            return Ok("Zapisano zmiany");
         }
 
         //adres DELETE: api/Notes/5

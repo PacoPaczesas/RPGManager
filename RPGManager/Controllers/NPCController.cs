@@ -4,6 +4,7 @@ using RPGManager.Data;
 using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
+using RPGManager.Validators;
 
 namespace RPGManager.Controllers
 {
@@ -25,21 +26,21 @@ namespace RPGManager.Controllers
             var npcs = _npcService.GetNPCs();
             if (npcs == null)
             {
-                return NotFound(); // Zwraca błąd 404 jeżeli lista Country jest pusta
+                return NotFound("Lista NPC jest pusta");
             }
             return Ok(npcs);
         }
 
-        //adres GET: api/NPCs/id
+        //adres GET: api/NPC/id
         [HttpGet("{id}")]
         public ActionResult<NPC> GetNPC(int id)
         {
             var npc = _npcService.GetNPC(id);
             if (npc == null)
             {
-                return NotFound();
+                return BadRequest("NPC o danym Id nie istnieje");
             }
-            return npc;
+            return Ok(npc);
         }
 
         //adres POST: api/NPCs
@@ -62,13 +63,14 @@ namespace RPGManager.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateNpc(int id, [FromBody] NPCDto npcDto)
         {
-            var npc = _npcService.UpdateNPC(id, npcDto);
+            ValidatorResult<NPC> NPCValidator = new ValidatorResult<NPC>();
+            NPCValidator = _npcService.UpdateNPC(id, npcDto);
 
-            if (npc == null)
+            if (!NPCValidator.IsCompleate)
             {
-                return NotFound();
+                return BadRequest(NPCValidator.Message);
             }
-            return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
+            return Ok("Zaktualizowano dane");
         }
 
         //adres DELETE: api/NPCs/id
@@ -81,7 +83,7 @@ namespace RPGManager.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok("usunięto NPC");
         }
 
         //atak
@@ -103,9 +105,9 @@ namespace RPGManager.Controllers
 
             if (!AttackValidator.IsCompleate)
             {
-                return NotFound();
+                return BadRequest(AttackValidator.Message);
             }
-            return NoContent();
+            return Ok(AttackValidator.Message);
         }
 
     }

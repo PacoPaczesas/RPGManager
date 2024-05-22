@@ -10,7 +10,7 @@ namespace RPGManager.Services.Interfaces
         IEnumerable<Country> GetCountries();
         Country GetCountry(int id);
         ValidatorResult<Country> AddCountry(CountryDto countryDto);
-        ValidatorResult<Country> UpdateCountry(int id, CountryDto countryDto);
-        Country DeleteCountry(int id);
+        void UpdateCountry(int id, CountryDto countryDto);
+        void DeleteCountry(int id);
     }
 }

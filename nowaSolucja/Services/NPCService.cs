@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using RPGManager.Validators;
 using System.ComponentModel.DataAnnotations;
 
-namespace RPGManager.Services
+namespace WarstwaWprowadzania.Services
 {
     public class NPCService : INPCService
     {
@@ -63,10 +63,8 @@ namespace RPGManager.Services
             return (NPCvalidator);
         }
 
-        public ValidatorResult<NPC> UpdateNPC(int id, NPCDto npcDto)
+        public NPC UpdateNPC(int id, NPCDto npcDto)
         {
-            ValidatorResult<NPC> NPCvalidator = new ValidatorResult<NPC>();
-
             var npc = _context.NPCs.Find(id);
 
             if (npc == null)
@@ -79,16 +77,10 @@ namespace RPGManager.Services
             npc.Description = npcDto.Description;
             npc.CountryId = npcDto.CountryId;
 
-            NPCvalidator = _NPCValidator.Validate(npc);
+            _context.NPCs.Update(npc);
+            _context.SaveChanges();
 
-            if (NPCvalidator.IsCompleate)
-            {
-                _context.NPCs.Update(npc);
-                _context.SaveChanges();
-                return NPCvalidator;
-            }
-
-            return NPCvalidator;
+            return npc;
         }
 
         public NPC DeleteNPC(int id)

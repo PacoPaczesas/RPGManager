@@ -5,6 +5,7 @@ using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
 using System.Linq;
+using System.Security.Cryptography;
 
 
 namespace RPGManager.Controllers
@@ -27,7 +28,7 @@ namespace RPGManager.Controllers
             var countries = _countryService.GetCountries();
             if (countries == null)
             {
-                return NotFound(); // Zwraca błąd 404 jeżeli lista Country jest pusta
+                return NotFound("Lista Krajów jest pusta"); // Zwraca błąd 404 jeżeli lista Country jest pusta
             }
             return Ok(countries); // zwraca listę krajków
         }
@@ -41,9 +42,9 @@ namespace RPGManager.Controllers
 
             if (country == null)
             {
-                return NotFound();
+                return NotFound("Kraj o danym Id nie istnieje");
             }
-            return country;
+            return Ok(country);
         }
 
 
@@ -68,18 +69,30 @@ namespace RPGManager.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateCountry(int id, [FromBody] CountryDto countryDto)
         {
-          _countryService.UpdateCountry(id, countryDto);
-            return NoContent(); // Zwraca status 204 No Content po pomyślnej aktualizacji
+            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
+            CountryValidator = _countryService.UpdateCountry(id, countryDto);
+
+            if (!CountryValidator.IsCompleate)
+            {
+                return BadRequest(CountryValidator.Message);
+            }
+            return Ok("Zaktualizowano dane");
         }
+
 
         // adres DELETE: api/Countries/id
         [HttpDelete("{id}")]
         public ActionResult<Country> DeleteCountry(int id)
         {
-            _countryService.DeleteCountry(id);
-            return NoContent();
-        }
+            var country = _countryService.DeleteCountry(id);
 
+            if (country == null)
+            {
+                return BadRequest("Kraj o danym Id nie istnieje");
+            }
+
+            return Ok("Usunięto kraj");
+        }
 
     }
 }

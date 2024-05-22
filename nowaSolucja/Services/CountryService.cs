@@ -5,9 +5,8 @@ using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
 using RPGManager.Validators;
-using System.Diagnostics.Metrics;
 
-namespace RPGManager.Services
+namespace WarstwaWprowadzania.Services
 {
 
         public class CountryService : ICountryService
@@ -55,43 +54,25 @@ namespace RPGManager.Services
         }
 
 
-        public ValidatorResult<Country> UpdateCountry(int id, CountryDto countryDto)
-        {
-            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
-            CountryValidator.obj = _context.Countries.Find(id);
-
-            if (CountryValidator.obj == null)
-            {
-                CountryValidator.IsCompleate = false;
-                CountryValidator.Message = "Nie znaleziono kraju o danym Id";
-                return CountryValidator;
-            }
-
-            CountryValidator.obj.Name = countryDto.Name;
-            CountryValidator.obj.Capital = countryDto.Capital;
-
-            CountryValidator = _CountryValidator.Validate(CountryValidator.obj);
-
-            if (!CountryValidator.IsCompleate)
-            {
-                return CountryValidator;
-            }
-
-            _context.Countries.Update(CountryValidator.obj);
-            _context.SaveChanges();
-
-            return CountryValidator;
-        }
-
-        public Country DeleteCountry(int id)
+        public void UpdateCountry(int id, CountryDto countryDto)
         {
             var country = _context.Countries.Find(id);
-            if (country == null) return null;
+            if (country == null) return;
+
+            country.Name = countryDto.Name;
+            country.Capital = countryDto.Capital;
+
+            _context.Countries.Update(country);
+            _context.SaveChanges();
+        }
+
+        public void DeleteCountry(int id)
+        {
+            var country = _context.Countries.Find(id);
+            if (country == null) return;
 
             _context.Countries.Remove(country);
             _context.SaveChanges();
-
-            return country;
         }
 
     }

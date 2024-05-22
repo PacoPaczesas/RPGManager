@@ -52,33 +52,22 @@ namespace RPGManager.Services
             return (NoteValidator);
         }
 
-        public ValidatorResult<Note> UpdateNote (int id, NoteDto noteDto)
+        public Note UpdateNote (int id, NoteDto noteDto)
         {
-            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
             var note = _context.Notes.Find(id);
 
             if (note == null)
             {
-                NoteValidator.IsCompleate = false;
-                NoteValidator.Message = "Nie znaleziono notatki o wskazanym Id";
-                return NoteValidator;
+                return null;
             }
-
             note.Title = noteDto.Title;
             note.Text = noteDto.Text;
             note.NPCId = noteDto.NPCId;
 
-            NoteValidator = _NoteValidator.Validate(note);
-
-            if (!NoteValidator.IsCompleate)
-            {
-                return NoteValidator;
-            }
-
             _context.Notes.Update(note);
             _context.SaveChanges(); 
             
-            return NoteValidator;
+            return note;
         }
 
         public Note DeleteNote(int id)

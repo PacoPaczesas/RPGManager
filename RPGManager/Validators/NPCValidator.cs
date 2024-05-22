@@ -20,7 +20,7 @@ namespace RPGManager.Validators
             if (npc.Name == null || npc.Name.Length < 2)
             {
                 NPCValidator.IsCompleate = false;
-                NPCValidator.Message = "Brak imienia lub imie jest za krótkie (mniej niż co najmniej dwa znaki";
+                NPCValidator.Message = "Brak imienia lub imie jest za krótkie (mniej niż dwa znaki";
                 return NPCValidator;
             }
             if (npc.Exp < 0)
@@ -29,16 +29,16 @@ namespace RPGManager.Validators
                 NPCValidator.Message = "brak wprowadzonej lub błędna wartość exp. Exp nie może być mniejsze niż 0";
                 return NPCValidator;
             }
-            if (npc.Strength < 0)
+            if (npc.Strength < 1)
             {
                 NPCValidator.IsCompleate = false;
-                NPCValidator.Message = "brak wprowadzonej lub błędna wartość siła. Siłą nie może być mniejsze niż 0";
+                NPCValidator.Message = "brak wprowadzonej lub błędna wartość siła. Siłą nie może być mniejsze niż 1";
                 return NPCValidator;
             }
-            if (npc.Might < 0)
+            if (npc.Might < 1)
             {
                 NPCValidator.IsCompleate = false;
-                NPCValidator.Message = "brak wprowadzonej lub błędna wartość coc. Moc nie może być mniejsze niż 0";
+                NPCValidator.Message = "brak wprowadzonej lub błędna wartość coc. Moc nie może być mniejsze niż 1";
                 return NPCValidator;
             }
 

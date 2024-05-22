@@ -72,43 +72,5 @@ namespace RPGManager.Models
             Random random = new Random();
             return Strength + Lvl + random.Next(1, Strength);
         }
-
-
-        // potrzebne jest wcześniejsze utworzenie obiektu klasy walidator, który można gdzieś zapisać po zwróceniu returnem.
-        // PYTANIE czy muszę tutaj jeszcze zabezpieczać się przed brakiem takich danych jak MOC i SIŁA, które są wymagane w konstruktorze? Z tego względi, że są w konstruktorze chyba nie.
-        public ValidatorResult<NPC> Validate()
-        {
-            ValidatorResult<NPC> validator = new ValidatorResult<NPC>();
-            validator.IsCompleate = true;
-            validator.Message = "ok";
-
-            if (Name == null || Name.Length < 2)
-            {
-                validator.IsCompleate = false;
-                validator.Message = "Brak imienia lub imie jest za krótkie (mniej niż co najmniej dwa znaki";
-                return validator;
-            }
-            if (Exp < 0)
-            {
-                validator.IsCompleate = false;
-                validator.Message = "brak wprowadzonej lub błędna wartość exp. Exp nie może być mniejsze niż 0";
-                return validator;
-            }
-            if (Strength < 0)
-            {
-                validator.IsCompleate = false;
-                validator.Message = "brak wprowadzonej lub błędna wartość siła. Siłą nie może być mniejsze niż 0";
-                return validator;
-            }
-            if (Might < 0)
-            {
-                validator.IsCompleate = false;
-                validator.Message = "brak wprowadzonej lub błędna wartość coc. Moc nie może być mniejsze niż 0";
-                return validator;
-            }
-
-            return validator;
-        }
-
     }
 }

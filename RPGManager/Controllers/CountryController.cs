@@ -24,7 +24,7 @@ namespace RPGManager.Controllers
             var countries = _countryService.GetCountries();
             if (countries == null)
             {
-                return NotFound("Lista Krajów jest pusta"); // Zwraca błąd 404 jeżeli lista Country jest pusta
+                return NotFound("Lista Krajów jest pusta");
             }
             return Ok(countries); // zwraca listę krajków
         }

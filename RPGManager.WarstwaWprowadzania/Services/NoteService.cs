@@ -1,8 +1,9 @@
-﻿using RPGManager.Data;
+﻿
 using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
 using RPGManager.Validators;
+using RPGManager.WarstwaWprowadzania.Data;
 using System.ComponentModel.DataAnnotations;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -10,10 +11,10 @@ namespace RPGManager.Services
 {
     public class NoteService : INoteService
     {
-        private readonly DataContext _context;
+        private readonly IDataContext _context;
         private readonly IValidator<Note> _NoteValidator;
 
-        public NoteService(DataContext context, IValidator<Note> noteValidator)
+        public NoteService(IDataContext context, IValidator<Note> noteValidator)
         {
             _context = context;
             _NoteValidator = noteValidator;

@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using RPGManager.Data;
 using RPGManager.Models;
 using RPGManager.Services;
 using RPGManager.Services.Interfaces;
 using RPGManager.Validators;
+using RPGManager.WarstwaInfrastruktury.Data;
+using RPGManager.WarstwaWprowadzania.Data;
 using System.Text.Json.Serialization;
 
 
@@ -27,6 +28,7 @@ builder.Services.AddTransient<INoteService, NoteService>();
 builder.Services.AddTransient<IValidator<NPC>, NPCValidator>();
 builder.Services.AddTransient<IValidator<Country>, CountryValidator>();
 builder.Services.AddTransient<IValidator<Note>, NoteValidator>();
+builder.Services.AddTransient<IDataContext, DataContext>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {

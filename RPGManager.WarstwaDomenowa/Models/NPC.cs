@@ -1,5 +1,4 @@
-﻿using RPGManager.Dtos;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RPGManager.Models
 {

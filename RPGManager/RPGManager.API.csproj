@@ -16,4 +16,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RPGManager.WarstwaDomenowa\RPGManager.WarstwaDomenowa.csproj" />
+    <ProjectReference Include="..\RPGManager.WarstwaInfrastruktury\RPGManager.WarstwaInfrastruktury.csproj" />
+    <ProjectReference Include="..\RPGManager.WarstwaWprowadzania\RPGManager.WarstwaWprowadzania.csproj" />
+  </ItemGroup>
+
 </Project>

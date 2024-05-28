@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RPGManager.Data;
 using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;

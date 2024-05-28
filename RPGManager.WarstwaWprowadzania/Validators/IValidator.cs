@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RPGManager.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using RPGManager.Models;
 
 namespace RPGManager.Validators
 {

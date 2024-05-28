@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RPGManager.Data;
-using RPGManager.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using RPGManager.Models;
+using RPGManager.WarstwaWprowadzania.Data;
+
 
 namespace RPGManager.Validators
 {
     public class NoteValidator : IValidator<Note>
     {
-
-        private readonly DataContext _context;
-        public NoteValidator(DataContext context)
+        private readonly IDataContext _context;
+        public NoteValidator(IDataContext context)
         {
             _context = context;
         }

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RPGManager.Data;
 using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
-using RPGManager.Validators;
 
 namespace RPGManager.Controllers
 {
@@ -90,18 +87,7 @@ namespace RPGManager.Controllers
         [HttpPost("attack/{attackerId}/{defenderId}")]
         public IActionResult Attack(int attackerId, int defenderId)
         {
-            // na początku sprawdzam czy dane NPC wogóle istnieją. Zastanawiam się czy powinno to mieć miejsce tutaj czy w NPCService. Przeniosłem to do NPC service
-            /*            var attacker = _npcService.GetNPC(attackerId);
-                        var defender = _npcService.GetNPC(defenderId);
-
-                        if (attacker == null || defender == null)
-                        {
-                            return NotFound("Nie znaleziono NPC o danych ID");
-                        }*/
-
-
-            ValidatorResult<NPC> AttackValidator = new ValidatorResult<NPC>();
-            AttackValidator = _npcService.Attack(attackerId, defenderId);
+            var AttackValidator = _npcService.Attack(attackerId, defenderId);
 
             if (!AttackValidator.IsCompleate)
             {

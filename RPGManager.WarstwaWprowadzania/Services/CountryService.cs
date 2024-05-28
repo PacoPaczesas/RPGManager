@@ -1,21 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RPGManager.Data;
-using RPGManager.Dtos;
+﻿using RPGManager.Dtos;
 using RPGManager.Models;
 using RPGManager.Services.Interfaces;
 using RPGManager.Validators;
-using System.Diagnostics.Metrics;
+using RPGManager.WarstwaWprowadzania.Data;
+
 
 namespace RPGManager.Services
 {
 
-        public class CountryService : ICountryService
+    public class CountryService : ICountryService
         {
-            private readonly DataContext _context;
+        // tu było OK
+            private readonly IDataContext _context;
             private readonly IValidator<Country> _CountryValidator;
 
-        public CountryService(DataContext context, IValidator<Country> CountryValidator)
+        public CountryService(IDataContext context, IValidator<Country> CountryValidator)
             {
                 _context = context;
                 _CountryValidator = CountryValidator;

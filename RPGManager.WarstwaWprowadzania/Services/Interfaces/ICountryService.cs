@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RPGManager.Dtos;
+﻿using RPGManager.Dtos;
 using RPGManager.Models;
 
 namespace RPGManager.Services.Interfaces

@@ -1,8 +1,8 @@
-﻿using RPGManager.Models;
+﻿using RPGManager.WarstwaDomenowa.Models;
 
-namespace RPGManager.Validators
+namespace RPGManager.WarstwaWprowadzania.Validators
 {
-    public interface IValidator <T>
+    public interface IValidator<T>
     {
         ValidatorResult<T> Validate(T obj);
     }

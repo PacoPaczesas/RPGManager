@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RPGManager.Models
+namespace RPGManager.WarstwaDomenowa.Models
 {
     public class NPC
     {
@@ -22,11 +22,11 @@ namespace RPGManager.Models
         public int CountryId { get; set; } //  foreign key country
         public Country Country { get; set; }
         public ICollection<Note> Notes { get; set; }
-        public int Strength {  get; set; }
-        public int Might {  get; set; }
-        public int HP { get; set;}
+        public int Strength { get; set; }
+        public int Might { get; set; }
+        public int HP { get; set; }
         public int CurrentHP { get; set; }
-        public int AC { get; set;}
+        public int AC { get; set; }
         public int Exp { get; set; }
         public int Lvl { get; set; }
 

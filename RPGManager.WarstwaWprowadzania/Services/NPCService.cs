@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RPGManager.Dtos;
-using RPGManager.Models;
-using RPGManager.Services.Interfaces;
 //using NowaKlasa = RPGManager.NowaKlasa2;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using RPGManager.Validators;
 using RPGManager.WarstwaWprowadzania.Data;
+using RPGManager.WarstwaDomenowa.Models;
+using RPGManager.WarstwaWprowadzania.Dtos;
+using RPGManager.WarstwaWprowadzania.Services.Interfaces;
+using RPGManager.WarstwaWprowadzania.Validators;
 
 // namespace nie potrzebuje klamerek kiedy jest jeden dla całego pliku
-namespace RPGManager.Services;
+namespace RPGManager.WarstwaWprowadzania.Services;
 
 public class NPCService : INPCService
 {
@@ -56,9 +56,9 @@ public class NPCService : INPCService
             _context.NPCs.Add(npc);
             _context.SaveChanges();
 
-            return (NPCvalidator);
+            return NPCvalidator;
         }
-        return (NPCvalidator);
+        return NPCvalidator;
     }
 
     public ValidatorResult<NPC> UpdateNPC(int id, NPCDto npcDto)

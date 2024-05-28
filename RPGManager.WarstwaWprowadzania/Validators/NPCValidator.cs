@@ -1,14 +1,14 @@
-﻿using RPGManager.Models;
+﻿using RPGManager.WarstwaDomenowa.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace RPGManager.Validators
+namespace RPGManager.WarstwaWprowadzania.Validators
 {
 
 
     /// <summary>
     /// zwraca validatorResult
     /// </summary>
-    public class NPCValidator : IValidator <NPC>
+    public class NPCValidator : IValidator<NPC>
     {
         public ValidatorResult<NPC> Validate(NPC npc)
         {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RPGManager.Dtos
+namespace RPGManager.WarstwaWprowadzania.Dtos
 {
     public record class NPCDto(
         [Required(ErrorMessage = "Wymagane Imie NPC")]

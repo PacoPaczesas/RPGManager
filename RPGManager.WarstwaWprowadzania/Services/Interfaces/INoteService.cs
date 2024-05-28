@@ -1,17 +1,17 @@
-﻿using RPGManager.Dtos;
-using RPGManager.Models;
+﻿using RPGManager.WarstwaDomenowa.Models;
+using RPGManager.WarstwaWprowadzania.Dtos;
 
-namespace RPGManager.Services.Interfaces
+namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface INoteService
     {
         Note GetNote(int id);
         ValidatorResult<Note> AddNote(NoteDto noteDto);
-        ValidatorResult<Note> UpdateNote (int id, NoteDto noteDto);
-        Note DeleteNote (int id);
+        ValidatorResult<Note> UpdateNote(int id, NoteDto noteDto);
+        Note DeleteNote(int id);
 
 
-        
+
     }
 }
 

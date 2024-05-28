@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RPGManager.Dtos;
-using RPGManager.Models;
-using RPGManager.Services.Interfaces;
+using RPGManager.WarstwaDomenowa.Models;
+using RPGManager.WarstwaWprowadzania.Dtos;
+using RPGManager.WarstwaWprowadzania.Services.Interfaces;
 
 
 namespace RPGManager.Controllers

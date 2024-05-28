@@ -1,13 +1,12 @@
-﻿
-using RPGManager.Dtos;
-using RPGManager.Models;
-using RPGManager.Services.Interfaces;
-using RPGManager.Validators;
+﻿using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Data;
+using RPGManager.WarstwaWprowadzania.Dtos;
+using RPGManager.WarstwaWprowadzania.Services.Interfaces;
+using RPGManager.WarstwaWprowadzania.Validators;
 using System.ComponentModel.DataAnnotations;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace RPGManager.Services
+namespace RPGManager.WarstwaWprowadzania.Services
 {
     public class NoteService : INoteService
     {
@@ -43,17 +42,17 @@ namespace RPGManager.Services
             };
 
             NoteValidator = _NoteValidator.Validate(note);
-            if(NoteValidator.IsCompleate)
+            if (NoteValidator.IsCompleate)
             {
                 _context.Notes.Add(note);
                 _context.SaveChanges();
-                return (NoteValidator);
+                return NoteValidator;
             }
 
-            return (NoteValidator);
+            return NoteValidator;
         }
 
-        public ValidatorResult<Note> UpdateNote (int id, NoteDto noteDto)
+        public ValidatorResult<Note> UpdateNote(int id, NoteDto noteDto)
         {
             ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
             var note = _context.Notes.Find(id);
@@ -77,8 +76,8 @@ namespace RPGManager.Services
             }
 
             _context.Notes.Update(note);
-            _context.SaveChanges(); 
-            
+            _context.SaveChanges();
+
             return NoteValidator;
         }
 

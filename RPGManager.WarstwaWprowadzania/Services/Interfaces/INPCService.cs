@@ -1,7 +1,7 @@
-﻿using RPGManager.Dtos;
-using RPGManager.Models;
+﻿using RPGManager.WarstwaDomenowa.Models;
+using RPGManager.WarstwaWprowadzania.Dtos;
 
-namespace RPGManager.Services.Interfaces
+namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface INPCService
     {

@@ -1,8 +1,8 @@
-﻿using RPGManager.Models;
+﻿using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Data;
 
 
-namespace RPGManager.Validators
+namespace RPGManager.WarstwaWprowadzania.Validators
 {
     public class NoteValidator : IValidator<Note>
     {
@@ -12,7 +12,7 @@ namespace RPGManager.Validators
             _context = context;
         }
 
-        public ValidatorResult<Note> Validate (Note note)
+        public ValidatorResult<Note> Validate(Note note)
         {
             ValidatorResult<Note> validator = new ValidatorResult<Note>();
             validator.IsCompleate = true;

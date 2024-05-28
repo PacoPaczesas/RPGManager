@@ -1,4 +1,4 @@
-﻿namespace RPGManager.Dtos
+﻿namespace RPGManager.WarstwaWprowadzania.Dtos
 {
     public class NoteDto
     {

@@ -1,6 +1,6 @@
-﻿using RPGManager.Models;
+﻿using RPGManager.WarstwaDomenowa.Models;
 
-namespace RPGManager.Validators
+namespace RPGManager.WarstwaWprowadzania.Validators
 {
 
 
@@ -16,7 +16,7 @@ namespace RPGManager.Validators
             CountryValidator.Message = "ok";
             CountryValidator.obj = country;
 
-            if (country.Name.Length < 1) 
+            if (country.Name.Length < 1)
             {
                 CountryValidator.IsCompleate = false;
                 CountryValidator.Message = "Brak wprowadzonej nazwy kraju";

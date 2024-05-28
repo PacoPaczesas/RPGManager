@@ -1,34 +1,34 @@
-﻿using RPGManager.Dtos;
-using RPGManager.Models;
-using RPGManager.Services.Interfaces;
-using RPGManager.Validators;
+﻿using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Data;
+using RPGManager.WarstwaWprowadzania.Dtos;
+using RPGManager.WarstwaWprowadzania.Services.Interfaces;
+using RPGManager.WarstwaWprowadzania.Validators;
 
 
-namespace RPGManager.Services
+namespace RPGManager.WarstwaWprowadzania.Services
 {
 
     public class CountryService : ICountryService
-        {
+    {
         // tu było OK
-            private readonly IDataContext _context;
-            private readonly IValidator<Country> _CountryValidator;
+        private readonly IDataContext _context;
+        private readonly IValidator<Country> _CountryValidator;
 
         public CountryService(IDataContext context, IValidator<Country> CountryValidator)
-            {
-                _context = context;
-                _CountryValidator = CountryValidator;
-            }
+        {
+            _context = context;
+            _CountryValidator = CountryValidator;
+        }
 
-            public IEnumerable<Country> GetCountries()
-            {
-                return _context.Countries.OrderBy(c => c.Id).ToList();
-            }
+        public IEnumerable<Country> GetCountries()
+        {
+            return _context.Countries.OrderBy(c => c.Id).ToList();
+        }
 
-            public Country GetCountry(int id)
-            {
-                return _context.Countries.FirstOrDefault(c => c.Id == id);
-            }
+        public Country GetCountry(int id)
+        {
+            return _context.Countries.FirstOrDefault(c => c.Id == id);
+        }
 
 
         public ValidatorResult<Country> AddCountry(CountryDto countryDto)
@@ -48,9 +48,9 @@ namespace RPGManager.Services
                 _context.Countries.Add(country);
                 _context.SaveChanges();
 
-                return (CountryValidator);
+                return CountryValidator;
             }
-            return (CountryValidator);
+            return CountryValidator;
         }
 
 

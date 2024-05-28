@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RPGManager.Models;
+using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Data;
 
 namespace RPGManager.WarstwaInfrastruktury.Data;

@@ -1,4 +1,4 @@
-﻿namespace RPGManager.Models
+﻿namespace RPGManager.WarstwaDomenowa.Models
 {
     public class Note
     {

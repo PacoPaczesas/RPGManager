@@ -24,8 +24,8 @@ namespace RPGManager.API.Controllers
         [HttpPost]
         public ActionResult<Result<Goods>> PostGoods([FromBody]GoodsDto goodsDto)
         {
-            Result<Goods> GoodsValidator = new Result<Goods>();
-            GoodsValidator = _goodsService.AddNewGoods(goodsDto);
+            // Result<Goods> GoodsValidator = new Result<Goods>();
+            var GoodsValidator = _goodsService.AddNewGoods(goodsDto);
 
             if (!GoodsValidator.IsSuccessful)
             {
@@ -77,7 +77,7 @@ namespace RPGManager.API.Controllers
             return Ok("Towar usunięty pomyślnie");
         }
 
-        [HttpDelete("Usuń wskazane dobro ze wskazanego kraju")]
+        [HttpDelete("UsuńWskazaneDobroZeWskazanegoKraju")]
         public ActionResult RemoveGoodsFromCountry(int countryId, int goodsId)
         {
             bool result = _goodsService.RemoveGoodsFromCountry(countryId, goodsId);

@@ -46,10 +46,10 @@ public class DataContext : DbContext, IDataContext
             .HasForeignKey(cg => cg.GoodsId);
     }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+/*    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return base.SaveChangesAsync(cancellationToken);
-    }
+    }*/
 
 
 }

@@ -5,7 +5,7 @@ namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface INPCService
     {
-        Task<IEnumerable<NPC>> GetNPCs();
+        Task<IEnumerable<NPC>> GetNPCs(CancellationToken token);
         Task<NPC> GetNPC(int id);
         Task<Result<NPC>> AddNPC(NPCDto npcDto);
         Task<Result<NPC>> UpdateNPC(int id, NPCDto npcDto);

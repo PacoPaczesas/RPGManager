@@ -17,6 +17,6 @@ namespace RPGManager.WarstwaWprowadzania.Data
         public DbSet<Goods> Goods { get; set; }
         public DbSet<CountryGoods> CountryGoods { get; set; }
         public int SaveChanges();
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        //Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

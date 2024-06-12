@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 //using NowaKlasa = RPGManager.NowaKlasa2;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using RPGManager.WarstwaWprowadzania.Data;
 using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Dtos;
@@ -21,12 +20,12 @@ public class NPCService : INPCService
         _NPCValidator = NPCValidator;
     }
 
-    public async Task<IEnumerable<NPC>> GetNPCs()
+    public async Task<IEnumerable<NPC>> GetNPCs(CancellationToken token)
     {
         var npcs = await _context.NPCs
             .Include(npc => npc.Country)
             .OrderBy(npc => npc.Id)
-            .ToListAsync();
+            .ToListAsync(token);
         return npcs;
     }
 
@@ -55,7 +54,9 @@ public class NPCService : INPCService
         if (NPCvalidator.IsSuccessful)
         {
             await _context.NPCs.AddAsync(npc);
-            await _context.SaveChangesAsync();
+            // await _context.SaveChangesAsync();
+            _context.SaveChanges();
+
 
             return NPCvalidator;
         }
@@ -82,7 +83,8 @@ public class NPCService : INPCService
         if (NPCvalidator.IsSuccessful)
         {
             _context.NPCs.Update(npc);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return NPCvalidator;
         }
 
@@ -98,7 +100,8 @@ public class NPCService : INPCService
         }
 
         _context.NPCs.Remove(npc);
-        await _context.SaveChangesAsync();
+        //await _context.SaveChangesAsync();
+        _context.SaveChanges();
 
         return npc;
     }
@@ -112,8 +115,11 @@ public class NPCService : INPCService
             obj = null
         };
 
+        // oba mają wykonać się synchronicznie
         var attacker = await _context.NPCs.FindAsync(attackerId);
         var defender = await _context.NPCs.FindAsync(defenderId);
+        // >> następnie czekamy aż oba się wykonają i gdy będą skończone idziemy dalej
+
 
         if (attacker == null || defender == null)
         {
@@ -130,7 +136,8 @@ public class NPCService : INPCService
             AttackValidator.Message = "Sukces. Atakujący wykonał atak i zadał obrażenia";
 
             _context.NPCs.Update(attacker);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return AttackValidator;
         }
 

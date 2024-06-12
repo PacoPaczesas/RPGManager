@@ -18,9 +18,9 @@ namespace RPGManager.Controllers
 
         //adres GET: api/NPCs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<NPC>>> GetNPCs()
+        public async Task<ActionResult<IEnumerable<NPC>>> GetNPCs(CancellationToken token)
         {
-            var npcs = await _npcService.GetNPCs();
+            var npcs = await _npcService.GetNPCs(token);
             if (npcs == null || !npcs.Any())
             {
                 return NotFound("Lista NPC jest pusta");

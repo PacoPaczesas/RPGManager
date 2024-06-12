@@ -36,7 +36,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    b => b.MigrationsAssembly("RPGManager.API")); // Zmiana zestawu migracji na RPGManager.API
+    b => b.MigrationsAssembly("RPGManager.API")); // Zmiana migracji
 });
 
 var app = builder.Build();

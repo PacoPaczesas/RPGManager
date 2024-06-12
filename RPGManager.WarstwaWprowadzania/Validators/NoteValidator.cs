@@ -12,30 +12,30 @@ namespace RPGManager.WarstwaWprowadzania.Validators
             _context = context;
         }
 
-        public ValidatorResult<Note> Validate(Note note)
+        public Result<Note> Validate(Note note)
         {
-            ValidatorResult<Note> validator = new ValidatorResult<Note>();
-            validator.IsCompleate = true;
+            Result<Note> validator = new Result<Note>();
+            validator.IsSuccessful = true;
             validator.Message = "ok";
             validator.obj = note;
 
             if (note.Title.Length < 1)
             {
-                validator.IsCompleate = false;
+                validator.IsSuccessful = false;
                 validator.Message = "Brak tytułu notatki";
                 return validator;
             }
 
             if (note.Text.Length < 1)
             {
-                validator.IsCompleate = false;
+                validator.IsSuccessful = false;
                 validator.Message = "Brak treści notatki";
                 return validator;
             }
 
             if (!_context.NPCs.Any(npc => npc.Id == note.NPCId))
             {
-                validator.IsCompleate = false;
+                validator.IsSuccessful = false;
                 validator.Message = "NPC o podanym ID nie istnieje";
                 return validator;
             }

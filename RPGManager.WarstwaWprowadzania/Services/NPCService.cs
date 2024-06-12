@@ -39,9 +39,9 @@ public class NPCService : INPCService
         return npc;
     }
 
-    public async Task<ValidatorResult<NPC>> AddNPC(NPCDto npcDto)
+    public async Task<Result<NPC>> AddNPC(NPCDto npcDto)
     {
-        ValidatorResult<NPC> NPCvalidator = new ValidatorResult<NPC>();
+        //Result<NPC> NPCvalidator = new Result<NPC>();
 
         var npc = new NPC(npcDto.Exp, npcDto.Strength, npcDto.Might)
         {
@@ -50,9 +50,9 @@ public class NPCService : INPCService
             CountryId = npcDto.CountryId,
         };
 
-        NPCvalidator = _NPCValidator.Validate(npc);
+        var NPCvalidator = _NPCValidator.Validate(npc);
 
-        if (NPCvalidator.IsCompleate)
+        if (NPCvalidator.IsSuccessful)
         {
             await _context.NPCs.AddAsync(npc);
             await _context.SaveChangesAsync();
@@ -62,9 +62,9 @@ public class NPCService : INPCService
         return NPCvalidator;
     }
 
-    public async Task<ValidatorResult<NPC>> UpdateNPC(int id, NPCDto npcDto)
+    public async Task<Result<NPC>> UpdateNPC(int id, NPCDto npcDto)
     {
-        ValidatorResult<NPC> NPCvalidator = new ValidatorResult<NPC>();
+        //Result<NPC> NPCvalidator = new Result<NPC>();
 
         var npc = await _context.NPCs.FindAsync(id);
 
@@ -77,9 +77,9 @@ public class NPCService : INPCService
         npc.Description = npcDto.Description;
         npc.CountryId = npcDto.CountryId;
 
-        NPCvalidator = _NPCValidator.Validate(npc);
+        var NPCvalidator = _NPCValidator.Validate(npc);
 
-        if (NPCvalidator.IsCompleate)
+        if (NPCvalidator.IsSuccessful)
         {
             _context.NPCs.Update(npc);
             await _context.SaveChangesAsync();
@@ -103,11 +103,11 @@ public class NPCService : INPCService
         return npc;
     }
 
-    public async Task<ValidatorResult<NPC>> Attack(int attackerId, int defenderId)
+    public async Task<Result<NPC>> Attack(int attackerId, int defenderId)
     {
-        ValidatorResult<NPC> AttackValidator = new ValidatorResult<NPC>
+        Result<NPC> AttackValidator = new Result<NPC>
         {
-            IsCompleate = true,
+            IsSuccessful = true,
             Message = "ok",
             obj = null
         };
@@ -117,7 +117,7 @@ public class NPCService : INPCService
 
         if (attacker == null || defender == null)
         {
-            AttackValidator.IsCompleate = false;
+            AttackValidator.IsSuccessful = false;
             AttackValidator.Message = "Wprowadzono błędne ID. Co najmniej jeden z NPC o wprowadzonych ID nie istnieje";
             return AttackValidator;
         }

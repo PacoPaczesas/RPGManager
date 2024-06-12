@@ -46,17 +46,17 @@ namespace RPGManager.Controllers
 
         // adres POST: api/Countries
         [HttpPost]
-        public ActionResult<ValidatorResult<Country>> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
+        public ActionResult<Result<Country>> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
         {
-            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
-            CountryValidator = _countryService.AddCountry(countryDto);
+            Result<Country> countryValidator = new Result<Country>();
+            countryValidator = _countryService.AddCountry(countryDto);
 
-            if (!CountryValidator.IsCompleate)
+            if (!countryValidator.IsSuccessful)
             {
-                return BadRequest(CountryValidator.Message);
+                return BadRequest(countryValidator.Message);
             }
 
-            return CreatedAtAction(nameof(GetCountry), new { id = CountryValidator.obj.Id }, CountryValidator.obj); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
+            return CreatedAtAction(nameof(GetCountry), new { id = countryValidator.obj.Id }, countryValidator.obj); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
         }
 
 
@@ -65,12 +65,12 @@ namespace RPGManager.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateCountry(int id, [FromBody] CountryDto countryDto)
         {
-            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
-            CountryValidator = _countryService.UpdateCountry(id, countryDto);
+            Result<Country> countryValidator = new Result<Country>();
+            countryValidator = _countryService.UpdateCountry(id, countryDto);
 
-            if (!CountryValidator.IsCompleate)
+            if (!countryValidator.IsSuccessful)
             {
-                return BadRequest(CountryValidator.Message);
+                return BadRequest(countryValidator.Message);
             }
             return Ok("Zaktualizowano dane");
         }

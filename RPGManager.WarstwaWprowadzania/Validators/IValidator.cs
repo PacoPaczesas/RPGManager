@@ -4,6 +4,6 @@ namespace RPGManager.WarstwaWprowadzania.Validators
 {
     public interface IValidator<T>
     {
-        ValidatorResult<T> Validate(T obj);
+        Result<T> Validate(T obj);
     }
 }

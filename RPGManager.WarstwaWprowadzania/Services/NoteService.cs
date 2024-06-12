@@ -30,9 +30,9 @@ namespace RPGManager.WarstwaWprowadzania.Services
             return note;
         }
 
-        public ValidatorResult<Note> AddNote(NoteDto noteDto)
+        public Result<Note> AddNote(NoteDto noteDto)
         {
-            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
+            // Result<Note> NoteValidator = new Result<Note>();
 
             var note = new Note
             {
@@ -41,8 +41,8 @@ namespace RPGManager.WarstwaWprowadzania.Services
                 NPCId = noteDto.NPCId
             };
 
-            NoteValidator = _NoteValidator.Validate(note);
-            if (NoteValidator.IsCompleate)
+            var NoteValidator = _NoteValidator.Validate(note);
+            if (NoteValidator.IsSuccessful)
             {
                 _context.Notes.Add(note);
                 _context.SaveChanges();
@@ -52,14 +52,14 @@ namespace RPGManager.WarstwaWprowadzania.Services
             return NoteValidator;
         }
 
-        public ValidatorResult<Note> UpdateNote(int id, NoteDto noteDto)
+        public Result<Note> UpdateNote(int id, NoteDto noteDto)
         {
-            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
+            Result<Note> NoteValidator = new Result<Note>();
             var note = _context.Notes.Find(id);
 
             if (note == null)
             {
-                NoteValidator.IsCompleate = false;
+                NoteValidator.IsSuccessful = false;
                 NoteValidator.Message = "Nie znaleziono notatki o wskazanym Id";
                 return NoteValidator;
             }
@@ -70,7 +70,7 @@ namespace RPGManager.WarstwaWprowadzania.Services
 
             NoteValidator = _NoteValidator.Validate(note);
 
-            if (!NoteValidator.IsCompleate)
+            if (!NoteValidator.IsSuccessful)
             {
                 return NoteValidator;
             }

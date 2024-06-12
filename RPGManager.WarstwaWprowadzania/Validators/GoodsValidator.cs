@@ -17,21 +17,21 @@ namespace RPGManager.WarstwaWprowadzania.Validators
             _context = context;
         }
 
-        public ValidatorResult<Goods> Validate(Goods goods)
+        public Result<Goods> Validate(Goods goods)
         {
-            ValidatorResult<Goods> GoodsValidator = new ValidatorResult<Goods>();
-            GoodsValidator.IsCompleate = true;
+            Result<Goods> GoodsValidator = new Result<Goods>();
+            GoodsValidator.IsSuccessful = true;
             GoodsValidator.Message = "ok";
             GoodsValidator.obj = goods;
 
             if (goods.Name.Length < 1)
             {
-                GoodsValidator.IsCompleate = false;
+                GoodsValidator.IsSuccessful = false;
                 GoodsValidator.Message = "Brak wprowadzonej nazwy towaru";
             }
             if (goods.Price < 0 || goods.Name.Length < 1)
             {
-                GoodsValidator.IsCompleate = false;
+                GoodsValidator.IsSuccessful = false;
                 GoodsValidator.Message = "Nieprawidłowa cena towaru";
             }
 

@@ -22,12 +22,12 @@ namespace RPGManager.API.Controllers
 
         // adres POST: api/Goods
         [HttpPost]
-        public ActionResult<ValidatorResult<Goods>> PostGoods([FromBody]GoodsDto goodsDto)
+        public ActionResult<Result<Goods>> PostGoods([FromBody]GoodsDto goodsDto)
         {
-            ValidatorResult<Goods> GoodsValidator = new ValidatorResult<Goods>();
+            Result<Goods> GoodsValidator = new Result<Goods>();
             GoodsValidator = _goodsService.AddNewGoods(goodsDto);
 
-            if (!GoodsValidator.IsCompleate)
+            if (!GoodsValidator.IsSuccessful)
             {
                 return BadRequest(GoodsValidator.Message);
             }
@@ -77,7 +77,7 @@ namespace RPGManager.API.Controllers
             return Ok("Towar usunięty pomyślnie");
         }
 
-        [HttpDelete("RemoveGoodsFromCountry")]
+        [HttpDelete("Usuń wskazane dobro ze wskazanego kraju")]
         public ActionResult RemoveGoodsFromCountry(int countryId, int goodsId)
         {
             bool result = _goodsService.RemoveGoodsFromCountry(countryId, goodsId);

@@ -21,6 +21,10 @@ namespace RPGManager.WarstwaWprowadzania.Services
             _CountryValidator = CountryValidator;
         }
 
+
+
+
+
         public IEnumerable<Country> GetCountries()
         {
             //return _context.Countries.OrderBy(c => c.Id).ToList();
@@ -40,9 +44,9 @@ namespace RPGManager.WarstwaWprowadzania.Services
         }
 
 
-        public ValidatorResult<Country> AddCountry(CountryDto countryDto)
+        public Result<Country> AddCountry(CountryDto countryDto)
         {
-            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
+            Result<Country> countryValidator = new Result<Country>();
 
             var country = new Country()
             {
@@ -50,37 +54,36 @@ namespace RPGManager.WarstwaWprowadzania.Services
                 Capital = countryDto.Capital
             };
 
-            CountryValidator = _CountryValidator.Validate(country);
+            countryValidator = _CountryValidator.Validate(country);
 
-            if (CountryValidator.IsCompleate)
+            if (countryValidator.IsSuccessful)
             {
                 _context.Countries.Add(country);
                 _context.SaveChanges();
-
-                return CountryValidator;
             }
-            return CountryValidator;
+            return countryValidator;
         }
 
 
-        public ValidatorResult<Country> UpdateCountry(int id, CountryDto countryDto)
+        public Result<Country> UpdateCountry(int id, CountryDto countryDto)
         {
-            ValidatorResult<Country> CountryValidator = new ValidatorResult<Country>();
-            CountryValidator.obj = _context.Countries.Find(id);
+            Result<Country> CountryValidator = new Result<Country>();
+            //CountryValidator.obj = _context.Countries.Find(id);
+            var Country = _context.Countries.Find(id);
 
-            if (CountryValidator.obj == null)
+            if (Country == null)
             {
-                CountryValidator.IsCompleate = false;
+                CountryValidator.IsSuccessful = false;
                 CountryValidator.Message = "Nie znaleziono kraju o danym Id";
                 return CountryValidator;
             }
 
-            CountryValidator.obj.Name = countryDto.Name;
-            CountryValidator.obj.Capital = countryDto.Capital;
+            Country.Name = countryDto.Name;
+            Country.Capital = countryDto.Capital;
 
-            CountryValidator = _CountryValidator.Validate(CountryValidator.obj);
+            CountryValidator = _CountryValidator.Validate(Country);
 
-            if (!CountryValidator.IsCompleate)
+            if (!CountryValidator.IsSuccessful)
             {
                 return CountryValidator;
             }

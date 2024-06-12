@@ -35,12 +35,12 @@ namespace RPGManager.Controllers
 
         //adres POST: api/Notes
         [HttpPost]
-        public ActionResult <ValidatorResult<Note>> CreateNote([FromBody] NoteDto noteDto)
+        public ActionResult <Result<Note>> CreateNote([FromBody] NoteDto noteDto)
         {
-            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
-            NoteValidator = _noteService.AddNote(noteDto);
+            // Result<Note> NoteValidator = new Result<Note>();
+            var NoteValidator = _noteService.AddNote(noteDto);
 
-            if (!NoteValidator.IsCompleate)
+            if (!NoteValidator.IsSuccessful)
             {
                 return BadRequest(NoteValidator.Message);
             }
@@ -52,9 +52,9 @@ namespace RPGManager.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateNote(int id, [FromBody] NoteDto noteDto)
         {
-            ValidatorResult<Note> NoteValidator = new ValidatorResult<Note>();
-            NoteValidator = _noteService.UpdateNote(id, noteDto);
-            if (!NoteValidator.IsCompleate)
+            //Result<Note> NoteValidator = new Result<Note>();
+            var NoteValidator = _noteService.UpdateNote(id, noteDto);
+            if (!NoteValidator.IsSuccessful)
             {
                 return BadRequest(NoteValidator.Message);
             }

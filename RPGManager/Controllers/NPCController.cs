@@ -42,11 +42,11 @@ namespace RPGManager.Controllers
 
         //adres POST: api/NPCs
         [HttpPost]
-        public async Task<ActionResult<ValidatorResult<NPC>>> PostNPC([FromBody] NPCDto npcDto)
+        public async Task<ActionResult<Result<NPC>>> PostNPC([FromBody] NPCDto npcDto)
         {
             var NPCValidator = await _npcService.AddNPC(npcDto);
 
-            if (!NPCValidator.IsCompleate)
+            if (!NPCValidator.IsSuccessful)
             {
                 return BadRequest(NPCValidator.Message);
             }
@@ -59,7 +59,7 @@ namespace RPGManager.Controllers
         {
             var NPCValidator = await _npcService.UpdateNPC(id, npcDto);
 
-            if (!NPCValidator.IsCompleate)
+            if (!NPCValidator.IsSuccessful)
             {
                 return BadRequest(NPCValidator.Message);
             }
@@ -85,7 +85,7 @@ namespace RPGManager.Controllers
         {
             var AttackValidator = await _npcService.Attack(attackerId, defenderId);
 
-            if (!AttackValidator.IsCompleate)
+            if (!AttackValidator.IsSuccessful)
             {
                 return BadRequest(AttackValidator.Message);
             }

@@ -17,9 +17,9 @@ public class GoodsService : IGoodsService
         _GoodsValidator = GoodsValidator;
     }
 
-    public ValidatorResult<Goods> AddNewGoods(GoodsDto goodsDto)
+    public Result<Goods> AddNewGoods(GoodsDto goodsDto)
     {
-        ValidatorResult<Goods> GoodsValidator = new ValidatorResult<Goods>();
+        Result<Goods> GoodsValidator = new Result<Goods>();
 
         var goods = new Goods();
         {
@@ -29,7 +29,7 @@ public class GoodsService : IGoodsService
 
         GoodsValidator = _GoodsValidator.Validate(goods);
 
-        if (GoodsValidator.IsCompleate)
+        if (GoodsValidator.IsSuccessful)
         {
             _context.Goods.Add(goods);
             _context.SaveChanges();

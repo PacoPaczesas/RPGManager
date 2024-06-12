@@ -1,9 +1,9 @@
 ﻿namespace RPGManager.WarstwaDomenowa.Models
 {
 
-    public class ValidatorResult<T>
+    public class Result<T>
     {
-        public bool IsCompleate;
+        public bool IsSuccessful;
         public string Message;
         public T obj;
     }

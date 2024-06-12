@@ -1,4 +1,5 @@
-﻿using RPGManager.WarstwaDomenowa.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Data;
 using RPGManager.WarstwaWprowadzania.Dtos;
 using RPGManager.WarstwaWprowadzania.Services.Interfaces;
@@ -22,12 +23,20 @@ namespace RPGManager.WarstwaWprowadzania.Services
 
         public IEnumerable<Country> GetCountries()
         {
-            return _context.Countries.OrderBy(c => c.Id).ToList();
+            //return _context.Countries.OrderBy(c => c.Id).ToList();
+            return _context.Countries
+                .Include(c => c.CountryGoods)
+                .ThenInclude(cg => cg.Goods)
+                .OrderBy(c => c.Id).ToList();
         }
 
         public Country GetCountry(int id)
         {
-            return _context.Countries.FirstOrDefault(c => c.Id == id);
+            //return _context.Countries.FirstOrDefault(c => c.Id == id);
+            return _context
+                .Countries.Include(c => c.CountryGoods)
+                .ThenInclude(cg => cg.Goods)
+                .FirstOrDefault(c => c.Id == id);
         }
 
 

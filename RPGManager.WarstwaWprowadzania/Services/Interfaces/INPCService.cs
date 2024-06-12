@@ -5,11 +5,11 @@ namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface INPCService
     {
-        IEnumerable<NPC> GetNPCs();
-        NPC GetNPC(int id);
-        ValidatorResult<NPC> AddNPC(NPCDto npcDto);
-        ValidatorResult<NPC> UpdateNPC(int id, NPCDto npcDto);
-        NPC DeleteNPC(int id);
-        ValidatorResult<NPC> Attack(int attackerId, int defenderId);
+        Task<IEnumerable<NPC>> GetNPCs();
+        Task<NPC> GetNPC(int id);
+        Task<ValidatorResult<NPC>> AddNPC(NPCDto npcDto);
+        Task<ValidatorResult<NPC>> UpdateNPC(int id, NPCDto npcDto);
+        Task<NPC> DeleteNPC(int id);
+        Task<ValidatorResult<NPC>> Attack(int attackerId, int defenderId);
     }
 }

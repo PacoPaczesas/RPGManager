@@ -18,10 +18,10 @@ namespace RPGManager.Controllers
 
         //adres GET: api/NPCs
         [HttpGet]
-        public ActionResult<IEnumerable<NPC>> GetNPCs()
+        public async Task<ActionResult<IEnumerable<NPC>>> GetNPCs()
         {
-            var npcs = _npcService.GetNPCs();
-            if (npcs == null)
+            var npcs = await _npcService.GetNPCs();
+            if (npcs == null || !npcs.Any())
             {
                 return NotFound("Lista NPC jest pusta");
             }
@@ -30,9 +30,9 @@ namespace RPGManager.Controllers
 
         //adres GET: api/NPC/id
         [HttpGet("{id}")]
-        public ActionResult<NPC> GetNPC(int id)
+        public async Task<ActionResult<NPC>> GetNPC(int id)
         {
-            var npc = _npcService.GetNPC(id);
+            var npc = await _npcService.GetNPC(id);
             if (npc == null)
             {
                 return BadRequest("NPC o danym Id nie istnieje");
@@ -42,26 +42,22 @@ namespace RPGManager.Controllers
 
         //adres POST: api/NPCs
         [HttpPost]
-        public ActionResult <ValidatorResult<NPC>> PostNPC([FromBody] NPCDto npcDto)
+        public async Task<ActionResult<ValidatorResult<NPC>>> PostNPC([FromBody] NPCDto npcDto)
         {
-            ValidatorResult<NPC> NPCValidator = new ValidatorResult<NPC>();
-            NPCValidator = _npcService.AddNPC(npcDto);
-
-            //var result = _npcService.AddNPC(npcDto);
+            var NPCValidator = await _npcService.AddNPC(npcDto);
 
             if (!NPCValidator.IsCompleate)
             {
                 return BadRequest(NPCValidator.Message);
             }
-            return CreatedAtAction(nameof(GetNPC), new { id = NPCValidator.obj.Id}, NPCValidator.obj);
+            return CreatedAtAction(nameof(GetNPC), new { id = NPCValidator.obj.Id }, NPCValidator.obj);
         }
 
         // adres PUT: api/NPC/id
         [HttpPut("{id}")]
-        public ActionResult UpdateNpc(int id, [FromBody] NPCDto npcDto)
+        public async Task<ActionResult> UpdateNpc(int id, [FromBody] NPCDto npcDto)
         {
-            ValidatorResult<NPC> NPCValidator = new ValidatorResult<NPC>();
-            NPCValidator = _npcService.UpdateNPC(id, npcDto);
+            var NPCValidator = await _npcService.UpdateNPC(id, npcDto);
 
             if (!NPCValidator.IsCompleate)
             {
@@ -72,22 +68,22 @@ namespace RPGManager.Controllers
 
         //adres DELETE: api/NPCs/id
         [HttpDelete("{id}")]
-        public IActionResult DeleteNPC(int id)
+        public async Task<IActionResult> DeleteNPC(int id)
         {
-            var npc = _npcService.DeleteNPC(id);
+            var npc = await _npcService.DeleteNPC(id);
             if (npc == null)
             {
                 return NotFound();
             }
 
-            return Ok("usunięto NPC");
+            return Ok("Usunięto NPC");
         }
 
         //atak
         [HttpPost("attack/{attackerId}/{defenderId}")]
-        public IActionResult Attack(int attackerId, int defenderId)
+        public async Task<IActionResult> Attack(int attackerId, int defenderId)
         {
-            var AttackValidator = _npcService.Attack(attackerId, defenderId);
+            var AttackValidator = await _npcService.Attack(attackerId, defenderId);
 
             if (!AttackValidator.IsCompleate)
             {

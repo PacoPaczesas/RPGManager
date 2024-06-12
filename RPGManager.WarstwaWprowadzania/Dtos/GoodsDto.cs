@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPGManager.WarstwaDomenowa.Models
+namespace RPGManager.WarstwaWprowadzania.Dtos
 {
-    public class Goods
+    public class GoodsDto
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
-        public List<CountryGoods> CountryGoods { get; set; }
-
     }
 }

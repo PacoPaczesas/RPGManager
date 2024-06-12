@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RPGManager.WarstwaInfrastruktury.Data;
 
@@ -10,9 +11,11 @@ using RPGManager.WarstwaInfrastruktury.Data;
 namespace RPGManager.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240528124333_UpdateGoods1")]
+    partial class UpdateGoods1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,21 +45,6 @@ namespace RPGManager.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.CountryGoods", b =>
-                {
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GoodsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CountryId", "GoodsId");
-
-                    b.HasIndex("GoodsId");
-
-                    b.ToTable("CountryGoods");
-                });
-
             modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.Goods", b =>
                 {
                     b.Property<int>("Id")
@@ -64,6 +52,9 @@ namespace RPGManager.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -73,6 +64,8 @@ namespace RPGManager.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Goods");
                 });
@@ -150,23 +143,15 @@ namespace RPGManager.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.CountryGoods", b =>
+            modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.Goods", b =>
                 {
                     b.HasOne("RPGManager.WarstwaDomenowa.Models.Country", "Country")
-                        .WithMany("CountryGoods")
+                        .WithMany("Import")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RPGManager.WarstwaDomenowa.Models.Goods", "Goods")
-                        .WithMany("CountryGoods")
-                        .HasForeignKey("GoodsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Country");
-
-                    b.Navigation("Goods");
                 });
 
             modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.NPC", b =>
@@ -193,12 +178,7 @@ namespace RPGManager.Migrations
 
             modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.Country", b =>
                 {
-                    b.Navigation("CountryGoods");
-                });
-
-            modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.Goods", b =>
-                {
-                    b.Navigation("CountryGoods");
+                    b.Navigation("Import");
                 });
 
             modelBuilder.Entity("RPGManager.WarstwaDomenowa.Models.NPC", b =>

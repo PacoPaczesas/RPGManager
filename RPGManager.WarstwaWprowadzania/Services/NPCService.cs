@@ -21,24 +21,25 @@ public class NPCService : INPCService
         _NPCValidator = NPCValidator;
     }
 
-    public IEnumerable<NPC> GetNPCs()
+    public async Task<IEnumerable<NPC>> GetNPCs()
     {
-        var npcs = _context.NPCs
-        .Include(npc => npc.Country)
-        .OrderBy(npc => npc.Id).ToList();
+        var npcs = await _context.NPCs
+            .Include(npc => npc.Country)
+            .OrderBy(npc => npc.Id)
+            .ToListAsync();
         return npcs;
     }
 
-    public NPC GetNPC(int id)
+    public async Task<NPC> GetNPC(int id)
     {
-        var npc = _context.NPCs
+        var npc = await _context.NPCs
             .Include(npc => npc.Country)
             .Include(npc => npc.Notes)
-            .FirstOrDefault(npc => npc.Id == id);
+            .FirstOrDefaultAsync(npc => npc.Id == id);
         return npc;
     }
 
-    public ValidatorResult<NPC> AddNPC(NPCDto npcDto)
+    public async Task<ValidatorResult<NPC>> AddNPC(NPCDto npcDto)
     {
         ValidatorResult<NPC> NPCvalidator = new ValidatorResult<NPC>();
 
@@ -53,26 +54,24 @@ public class NPCService : INPCService
 
         if (NPCvalidator.IsCompleate)
         {
-            _context.NPCs.Add(npc);
-            _context.SaveChanges();
+            await _context.NPCs.AddAsync(npc);
+            await _context.SaveChangesAsync();
 
             return NPCvalidator;
         }
         return NPCvalidator;
     }
 
-    public ValidatorResult<NPC> UpdateNPC(int id, NPCDto npcDto)
-
+    public async Task<ValidatorResult<NPC>> UpdateNPC(int id, NPCDto npcDto)
     {
         ValidatorResult<NPC> NPCvalidator = new ValidatorResult<NPC>();
 
-        var npc = _context.NPCs.Find(id);
+        var npc = await _context.NPCs.FindAsync(id);
 
         if (npc == null)
         {
             return null;
         }
-
 
         npc.Name = npcDto.Name;
         npc.Description = npcDto.Description;
@@ -83,36 +82,38 @@ public class NPCService : INPCService
         if (NPCvalidator.IsCompleate)
         {
             _context.NPCs.Update(npc);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NPCvalidator;
         }
 
         return NPCvalidator;
     }
 
-    public NPC DeleteNPC(int id)
+    public async Task<NPC> DeleteNPC(int id)
     {
-        var npc = _context.NPCs.Find(id);
+        var npc = await _context.NPCs.FindAsync(id);
         if (npc == null)
         {
             return null;
         }
 
         _context.NPCs.Remove(npc);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return npc;
     }
 
-    public ValidatorResult<NPC> Attack(int attackerId, int defenderId)
+    public async Task<ValidatorResult<NPC>> Attack(int attackerId, int defenderId)
     {
-        ValidatorResult<NPC> AttackValidator = new ValidatorResult<NPC>();
-        AttackValidator.IsCompleate = true;
-        AttackValidator.Message = "ok";
-        AttackValidator.obj = null;
+        ValidatorResult<NPC> AttackValidator = new ValidatorResult<NPC>
+        {
+            IsCompleate = true,
+            Message = "ok",
+            obj = null
+        };
 
-        var attacker = _context.NPCs.Find(attackerId);
-        var defender = _context.NPCs.Find(defenderId);
+        var attacker = await _context.NPCs.FindAsync(attackerId);
+        var defender = await _context.NPCs.FindAsync(defenderId);
 
         if (attacker == null || defender == null)
         {
@@ -120,7 +121,6 @@ public class NPCService : INPCService
             AttackValidator.Message = "Wprowadzono błędne ID. Co najmniej jeden z NPC o wprowadzonych ID nie istnieje";
             return AttackValidator;
         }
-
 
         int attackPower = attacker.AttackPower();
         if (attackPower > defender.AC)
@@ -130,7 +130,7 @@ public class NPCService : INPCService
             AttackValidator.Message = "Sukces. Atakujący wykonał atak i zadał obrażenia";
 
             _context.NPCs.Update(attacker);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return AttackValidator;
         }
 

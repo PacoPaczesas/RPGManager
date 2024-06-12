@@ -25,14 +25,18 @@ builder.Services.AddTransient<ICountryService, CountryService>();
 //builder.Services.AddTransient<INPCValidator, NPCDataValidationService>();
 builder.Services.AddTransient<INPCService, NPCService>();
 builder.Services.AddTransient<INoteService, NoteService>();
+builder.Services.AddTransient<IGoodsService, GoodsService>();
 builder.Services.AddTransient<IValidator<NPC>, NPCValidator>();
 builder.Services.AddTransient<IValidator<Country>, CountryValidator>();
 builder.Services.AddTransient<IValidator<Note>, NoteValidator>();
+builder.Services.AddTransient<IValidator<Goods>, GoodsValidator>();
 builder.Services.AddTransient<IDataContext, DataContext>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    b => b.MigrationsAssembly("RPGManager.API")); // Zmiana zestawu migracji na RPGManager.API
 });
 
 var app = builder.Build();

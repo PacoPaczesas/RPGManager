@@ -2,13 +2,19 @@
 using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Dtos;
 using RPGManager.WarstwaWprowadzania.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
+
+// OKOK
 
 namespace RPGManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CountriesController : ControllerBase // Dziedziczy z ControllerBase i dzięki temu mam dostęp do różnicy typów odpowiedzi, np. OK(), NotFound(), BadRequest()
+    public class CountriesController : ControllerBase
     {
         private readonly ICountryService _countryService;
 
@@ -19,22 +25,21 @@ namespace RPGManager.Controllers
 
         // adres GET api/Countries
         [HttpGet]
-        public ActionResult<IEnumerable<Country>> GetCountries()
+        public async Task<ActionResult<IEnumerable<Country>>> GetCountries(CancellationToken token)
         {
-            var countries = _countryService.GetCountries();
-            if (countries == null)
+            var countries = await _countryService.GetCountries(token);
+            if (countries == null || !countries.Any())
             {
                 return NotFound("Lista Krajów jest pusta");
             }
-            return Ok(countries); // zwraca listę krajków
+            return Ok(countries);
         }
-
 
         // adres GET: api/Countries/id
         [HttpGet("{id}")]
-        public ActionResult<Country> GetCountry(int id) // używam ActionResult, które daje mi możliwość zwrócenia NotFound
+        public async Task<ActionResult<Country>> GetCountry(int id)
         {
-            var country = _countryService.GetCountry(id);
+            var country = await _countryService.GetCountryAsync(id);
 
             if (country == null)
             {
@@ -43,30 +48,25 @@ namespace RPGManager.Controllers
             return Ok(country);
         }
 
-
         // adres POST: api/Countries
         [HttpPost]
-        public ActionResult<Result<Country>> PostCountry([FromBody] CountryDto countryDto) // używam CountryDto do "pobrania" danych. ID uzupełnia się automatycznie gdyż jest to klucz główny z autoinkrementacją
+        public async Task<ActionResult<Result<Country>>> PostCountry([FromBody] CountryDto countryDto)
         {
-            Result<Country> countryValidator = new Result<Country>();
-            countryValidator = _countryService.AddCountry(countryDto);
+            Result<Country> countryValidator = await _countryService.AddCountryAsync(countryDto);
 
             if (!countryValidator.IsSuccessful)
             {
                 return BadRequest(countryValidator.Message);
             }
 
-            return CreatedAtAction(nameof(GetCountry), new { id = countryValidator.obj.Id }, countryValidator.obj); // pokazuje ścieżkę gdzie dokładnie zostało utworzone Country
+            return CreatedAtAction(nameof(GetCountry), new { id = countryValidator.obj.Id }, countryValidator.obj);
         }
-
-
 
         // adres PUT: api/Countries/id
         [HttpPut("{id}")]
-        public ActionResult UpdateCountry(int id, [FromBody] CountryDto countryDto)
+        public async Task<ActionResult> UpdateCountry(int id, [FromBody] CountryDto countryDto)
         {
-            Result<Country> countryValidator = new Result<Country>();
-            countryValidator = _countryService.UpdateCountry(id, countryDto);
+            Result<Country> countryValidator = await _countryService.UpdateCountryAsync(id, countryDto);
 
             if (!countryValidator.IsSuccessful)
             {
@@ -75,12 +75,11 @@ namespace RPGManager.Controllers
             return Ok("Zaktualizowano dane");
         }
 
-
         // adres DELETE: api/Countries/id
         [HttpDelete("{id}")]
-        public ActionResult<Country> DeleteCountry(int id)
+        public async Task<ActionResult<Country>> DeleteCountry(int id)
         {
-            var country = _countryService.DeleteCountry(id);
+            var country = await _countryService.DeleteCountryAsync(id);
 
             if (country == null)
             {
@@ -89,7 +88,5 @@ namespace RPGManager.Controllers
 
             return Ok("Usunięto kraj");
         }
-
     }
 }
-

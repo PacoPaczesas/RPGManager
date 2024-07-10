@@ -54,11 +54,7 @@ public class NPCService : INPCService
         if (NPCvalidator.IsSuccessful)
         {
             await _context.NPCs.AddAsync(npc);
-            // await _context.SaveChangesAsync();
             _context.SaveChanges();
-
-
-            return NPCvalidator;
         }
         return NPCvalidator;
     }
@@ -83,9 +79,7 @@ public class NPCService : INPCService
         if (NPCvalidator.IsSuccessful)
         {
             _context.NPCs.Update(npc);
-            //await _context.SaveChangesAsync();
             _context.SaveChanges();
-            return NPCvalidator;
         }
 
         return NPCvalidator;
@@ -98,11 +92,8 @@ public class NPCService : INPCService
         {
             return null;
         }
-
         _context.NPCs.Remove(npc);
-        //await _context.SaveChangesAsync();
         _context.SaveChanges();
-
         return npc;
     }
 
@@ -115,10 +106,16 @@ public class NPCService : INPCService
             obj = null
         };
 
-        // oba mają wykonać się synchronicznie
-        var attacker = await _context.NPCs.FindAsync(attackerId);
-        var defender = await _context.NPCs.FindAsync(defenderId);
-        // >> następnie czekamy aż oba się wykonają i gdy będą skończone idziemy dalej
+        // Uruchamiamy oba zapytania równolegle
+        var attackerTask = _context.NPCs.FindAsync(attackerId).AsTask();
+        var defenderTask = _context.NPCs.FindAsync(defenderId).AsTask();
+
+        // Czekamy na zakończenie obu zapytań
+        await Task.WhenAll(attackerTask, defenderTask);
+
+        var attacker = await attackerTask;
+        var defender = await defenderTask;
+
 
 
         if (attacker == null || defender == null)
@@ -144,7 +141,6 @@ public class NPCService : INPCService
         AttackValidator.Message = "Atak się nie udał";
         return AttackValidator;
     }
-
 
 }
 

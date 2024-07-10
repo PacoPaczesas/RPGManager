@@ -2,8 +2,10 @@
 using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Dtos;
 using RPGManager.WarstwaWprowadzania.Services.Interfaces;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+// OKOK
 
 namespace RPGManager.Controllers
 {
@@ -18,12 +20,11 @@ namespace RPGManager.Controllers
             _noteService = noteService;
         }
 
-
         //adres GET: api/Notes/5
         [HttpGet("{id}")]
-        public ActionResult<Note> GetNoteById(int id)
+        public async Task<ActionResult<Note>> GetNoteById(int id)
         {
-            var note = _noteService.GetNote(id);
+            var note = await _noteService.GetNoteAsync(id);
 
             if (note == null)
             {
@@ -35,44 +36,40 @@ namespace RPGManager.Controllers
 
         //adres POST: api/Notes
         [HttpPost]
-        public ActionResult <Result<Note>> CreateNote([FromBody] NoteDto noteDto)
+        public async Task<ActionResult<Result<Note>>> CreateNote([FromBody] NoteDto noteDto)
         {
-            // Result<Note> NoteValidator = new Result<Note>();
-            var NoteValidator = _noteService.AddNote(noteDto);
+            var noteValidator = await _noteService.AddNoteAsync(noteDto);
 
-            if (!NoteValidator.IsSuccessful)
+            if (!noteValidator.IsSuccessful)
             {
-                return BadRequest(NoteValidator.Message);
+                return BadRequest(noteValidator.Message);
             }
- 
-            return CreatedAtAction(nameof(GetNoteById), new { id = NoteValidator.obj.Id }, NoteValidator.obj);
+
+            return CreatedAtAction(nameof(GetNoteById), new { id = noteValidator.obj.Id }, noteValidator.obj);
         }
 
         // adres PUT: api/Notes/id
         [HttpPut("{id}")]
-        public ActionResult UpdateNote(int id, [FromBody] NoteDto noteDto)
+        public async Task<ActionResult> UpdateNote(int id, [FromBody] NoteDto noteDto)
         {
-            //Result<Note> NoteValidator = new Result<Note>();
-            var NoteValidator = _noteService.UpdateNote(id, noteDto);
-            if (!NoteValidator.IsSuccessful)
+            var noteValidator = await _noteService.UpdateNoteAsync(id, noteDto);
+            if (!noteValidator.IsSuccessful)
             {
-                return BadRequest(NoteValidator.Message);
+                return BadRequest(noteValidator.Message);
             }
             return Ok("Zapisano zmiany");
         }
 
         //adres DELETE: api/Notes/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteNote(int id)
+        public async Task<IActionResult> DeleteNote(int id)
         {
-            var note = _noteService.DeleteNote(id);
+            var note = await _noteService.DeleteNoteAsync(id);
             if (note == null)
             {
                 return NotFound();
             }
             return NoContent();
         }
-
-
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
 
 namespace RPGManager.WarstwaDomenowa.Models
 {
@@ -8,6 +8,5 @@ namespace RPGManager.WarstwaDomenowa.Models
         public string Name { get; set; }
         public string Capital { get; set; }
         public List<CountryGoods> CountryGoods { get; set; }
-
     }
 }

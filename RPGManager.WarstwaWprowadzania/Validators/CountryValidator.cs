@@ -2,33 +2,27 @@
 
 namespace RPGManager.WarstwaWprowadzania.Validators
 {
-
-
-    /// <summary>
-    /// zwraca validatorResult
-    /// </summary>
     public class CountryValidator : IValidator<Country>
     {
         public Result<Country> Validate(Country country)
         {
-            Result<Country> CountryValidator = new Result<Country>();
-            CountryValidator.IsSuccessful = true;
-            CountryValidator.Message = "ok";
-            CountryValidator.obj = country;
+            Result<Country> countryValidator = new Result<Country>();
+            countryValidator.IsSuccessful = true;
+            countryValidator.Message = "ok";
+            countryValidator.obj = country;
 
-            if (country.Name.Length < 1)
+            if (string.IsNullOrWhiteSpace(country.Name))
             {
-                CountryValidator.IsSuccessful = false;
-                CountryValidator.Message = "Brak wprowadzonej nazwy kraju";
+                countryValidator.IsSuccessful = false;
+                countryValidator.Message = "Brak wprowadzonej nazwy kraju";
             }
-            if (country.Capital == null)
+            if (string.IsNullOrWhiteSpace(country.Capital))
             {
-                CountryValidator.IsSuccessful = false;
-                CountryValidator.Message = "Brak wprowadzonej nazwy stolicy kraju";
+                countryValidator.IsSuccessful = false;
+                countryValidator.Message = "Brak wprowadzonej nazwy stolicy kraju";
             }
 
-            return CountryValidator;
+            return countryValidator;
         }
-
     }
 }

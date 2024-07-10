@@ -1,22 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RPGManager.WarstwaDomenowa.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RPGManager.WarstwaWprowadzania.Data
 {
     public interface IDataContext
     {
-        //3 db sery + save changes
-        public DbSet<NPC> NPCs { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Note> Notes { get; set; }
-        public DbSet<Goods> Goods { get; set; }
-        public DbSet<CountryGoods> CountryGoods { get; set; }
-        public int SaveChanges();
-        //Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        DbSet<NPC> NPCs { get; set; }
+        DbSet<Country> Countries { get; set; }
+        DbSet<Note> Notes { get; set; }
+        DbSet<Goods> Goods { get; set; }
+        DbSet<CountryGoods> CountryGoods { get; set; }
+        DbSet<Users> Users { get; set; }
+        DbSet<PlayerCharacter> PlayerCharacters { get; set; }
+        int SaveChanges();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

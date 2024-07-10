@@ -1,17 +1,14 @@
 ﻿using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Dtos;
+using System.Threading.Tasks;
 
 namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface INoteService
     {
-        Note GetNote(int id);
-        Result<Note> AddNote(NoteDto noteDto);
-        Result<Note> UpdateNote(int id, NoteDto noteDto);
-        Note DeleteNote(int id);
-
-
-
+        Task<Note> GetNoteAsync(int id);
+        Task<Result<Note>> AddNoteAsync(NoteDto noteDto);
+        Task<Result<Note>> UpdateNoteAsync(int id, NoteDto noteDto);
+        Task<Note> DeleteNoteAsync(int id);
     }
 }
-

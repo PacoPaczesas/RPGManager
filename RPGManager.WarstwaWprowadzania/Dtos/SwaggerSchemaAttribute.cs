@@ -1,4 +1,0 @@
-﻿
-internal class SwaggerSchemaAttribute : Attribute
-{
-}

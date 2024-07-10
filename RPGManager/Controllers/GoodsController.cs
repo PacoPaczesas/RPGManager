@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RPGManager.WarstwaDomenowa.Models;
-using RPGManager.WarstwaWprowadzania.Data;
 using RPGManager.WarstwaWprowadzania.Dtos;
 using RPGManager.WarstwaWprowadzania.Services.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+//OKOK
+
 
 namespace RPGManager.API.Controllers
 {
@@ -11,64 +16,55 @@ namespace RPGManager.API.Controllers
     [ApiController]
     public class GoodsController : ControllerBase
     {
-        private readonly IDataContext _context;
         private readonly IGoodsService _goodsService;
 
-        public GoodsController(IDataContext context, IGoodsService goodsService)
+        public GoodsController(IGoodsService goodsService)
         {
-            _context = context;
             _goodsService = goodsService;
         }
 
         // adres POST: api/Goods
         [HttpPost]
-        public ActionResult<Result<Goods>> PostGoods([FromBody]GoodsDto goodsDto)
+        public async Task<ActionResult<Result<Goods>>> PostGoods([FromBody] GoodsDto goodsDto)
         {
-            // Result<Goods> GoodsValidator = new Result<Goods>();
-            var GoodsValidator = _goodsService.AddNewGoods(goodsDto);
+            var GoodsValidator = await _goodsService.AddNewGoodsAsync(goodsDto);
 
             if (!GoodsValidator.IsSuccessful)
             {
                 return BadRequest(GoodsValidator.Message);
             }
-            return Ok(goodsDto);
+            return Ok(GoodsValidator.obj);
         }
 
-        //adres GET: api/Goods
+        // adres GET: api/Goods
         [HttpGet]
-        public ActionResult<IEnumerable<Goods>> GetGoods()
+        public async Task<ActionResult<IEnumerable<Goods>>> GetGoods()
         {
-            var goods = _goodsService.GetGoods();
-            if (goods == null)
+            var goods = await _goodsService.GetGoodsAsync();
+            if (goods == null || !goods.Any())
             {
                 return NotFound("Lista towarów jest pusta");
             }
             return Ok(goods);
-
         }
 
-        [HttpPost("Przypisz dobro do kraju")]
-        public ActionResult AssignGoodsToCountry(int countryId, int goodId)
+        [HttpPost("AssignGoodsToCountry")]
+        public async Task<ActionResult> AssignGoodsToCountry(int countryId, int goodId)
         {
-            var country = _context.Countries.FirstOrDefault(c => c.Id == countryId);
-            var goods = _goodsService.GetGoods();
+            var result = await _goodsService.AssignGoodsToCountryAsync(countryId, goodId);
 
-            if (goods == null || country == null)
+            if (!result)
             {
                 return NotFound("Wprowadzono błędne Id");
             }
-            var countryGoods = new CountryGoods { CountryId = countryId, GoodsId = goodId };
-            _context.CountryGoods.Add(countryGoods);
-            _context.SaveChanges();
 
             return Ok("Dobra przypisane do kraju");
-
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Goods> DeleteGoods(int id)
+        public async Task<ActionResult> DeleteGoods(int id)
         {
-            var goods = _goodsService.DeleteGoods(id);
+            var goods = await _goodsService.DeleteGoodsAsync(id);
             if (goods == null)
             {
                 return NotFound("Towar o podanym ID nie istnieje");
@@ -77,10 +73,10 @@ namespace RPGManager.API.Controllers
             return Ok("Towar usunięty pomyślnie");
         }
 
-        [HttpDelete("UsuńWskazaneDobroZeWskazanegoKraju")]
-        public ActionResult RemoveGoodsFromCountry(int countryId, int goodsId)
+        [HttpDelete("RemoveGoodsFromCountry")]
+        public async Task<ActionResult> RemoveGoodsFromCountry(int countryId, int goodsId)
         {
-            bool result = _goodsService.RemoveGoodsFromCountry(countryId, goodsId);
+            var result = await _goodsService.RemoveGoodsFromCountryAsync(countryId, goodsId);
             if (!result)
             {
                 return NotFound("Nie znaleziono przypisania dobra do kraju o podanych ID.");
@@ -88,12 +84,5 @@ namespace RPGManager.API.Controllers
 
             return Ok("Przypisanie dobra do kraju zostało usunięte.");
         }
-
-
     }
-
-
-
-
-
 }

@@ -1,13 +1,16 @@
 ﻿using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Dtos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface IGoodsService
     {
-        Result<Goods> AddNewGoods(GoodsDto goodsDto);
-        IEnumerable<Goods> GetGoods();
-        Goods DeleteGoods(int id);
-        bool RemoveGoodsFromCountry(int countryId, int goodsId);
+        Task<Result<Goods>> AddNewGoodsAsync(GoodsDto goodsDto);
+        Task<IEnumerable<Goods>> GetGoodsAsync();
+        Task<bool> AssignGoodsToCountryAsync(int countryId, int goodId);
+        Task<Goods> DeleteGoodsAsync(int id);
+        Task<bool> RemoveGoodsFromCountryAsync(int countryId, int goodsId);
     }
 }

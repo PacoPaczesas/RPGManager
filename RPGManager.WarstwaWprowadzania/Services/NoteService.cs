@@ -1,39 +1,33 @@
-﻿using RPGManager.WarstwaDomenowa.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RPGManager.WarstwaDomenowa.Models;
 using RPGManager.WarstwaWprowadzania.Data;
 using RPGManager.WarstwaWprowadzania.Dtos;
 using RPGManager.WarstwaWprowadzania.Services.Interfaces;
 using RPGManager.WarstwaWprowadzania.Validators;
-using System.ComponentModel.DataAnnotations;
-using static System.Net.Mime.MediaTypeNames;
+using System.Threading.Tasks;
 
 namespace RPGManager.WarstwaWprowadzania.Services
 {
     public class NoteService : INoteService
     {
         private readonly IDataContext _context;
-        private readonly IValidator<Note> _NoteValidator;
+        private readonly IValidator<Note> _noteValidator;
 
         public NoteService(IDataContext context, IValidator<Note> noteValidator)
         {
             _context = context;
-            _NoteValidator = noteValidator;
+            _noteValidator = noteValidator;
         }
 
-        public Note GetNote(int id)
+        public async Task<Note> GetNoteAsync(int id)
         {
-            var note = _context.Notes.Find(id);
-            if (note == null)
-            {
-                return null;
-            }
-
-            return note;
+            return await _context.Notes
+                .Include(n => n.NPC)
+                .FirstOrDefaultAsync(n => n.Id == id);
         }
 
-        public Result<Note> AddNote(NoteDto noteDto)
+        public async Task<Result<Note>> AddNoteAsync(NoteDto noteDto)
         {
-            // Result<Note> NoteValidator = new Result<Note>();
-
             var note = new Note
             {
                 Title = noteDto.Title,
@@ -41,49 +35,48 @@ namespace RPGManager.WarstwaWprowadzania.Services
                 NPCId = noteDto.NPCId
             };
 
-            var NoteValidator = _NoteValidator.Validate(note);
-            if (NoteValidator.IsSuccessful)
+            var noteValidator = _noteValidator.Validate(note);
+            if (noteValidator.IsSuccessful)
             {
-                _context.Notes.Add(note);
+                await _context.Notes.AddAsync(note);
                 _context.SaveChanges();
-                return NoteValidator;
+                return noteValidator;
             }
 
-            return NoteValidator;
+            return noteValidator;
         }
 
-        public Result<Note> UpdateNote(int id, NoteDto noteDto)
+        public async Task<Result<Note>> UpdateNoteAsync(int id, NoteDto noteDto)
         {
-            Result<Note> NoteValidator = new Result<Note>();
-            var note = _context.Notes.Find(id);
+            var noteValidator = new Result<Note>();
+            var note = await _context.Notes.FindAsync(id);
 
             if (note == null)
             {
-                NoteValidator.IsSuccessful = false;
-                NoteValidator.Message = "Nie znaleziono notatki o wskazanym Id";
-                return NoteValidator;
+                noteValidator.IsSuccessful = false;
+                noteValidator.Message = "Nie znaleziono notatki o wskazanym Id";
+                return noteValidator;
             }
 
             note.Title = noteDto.Title;
             note.Text = noteDto.Text;
             note.NPCId = noteDto.NPCId;
 
-            NoteValidator = _NoteValidator.Validate(note);
+            noteValidator = _noteValidator.Validate(note);
 
-            if (!NoteValidator.IsSuccessful)
+            if (!noteValidator.IsSuccessful)
             {
-                return NoteValidator;
+                return noteValidator;
             }
 
             _context.Notes.Update(note);
             _context.SaveChanges();
-
-            return NoteValidator;
+            return noteValidator;
         }
 
-        public Note DeleteNote(int id)
+        public async Task<Note> DeleteNoteAsync(int id)
         {
-            var note = _context.Notes.Find(id);
+            var note = await _context.Notes.FindAsync(id);
             if (note == null)
             {
                 return null;
@@ -91,9 +84,7 @@ namespace RPGManager.WarstwaWprowadzania.Services
 
             _context.Notes.Remove(note);
             _context.SaveChanges();
-
             return note;
         }
-
     }
 }

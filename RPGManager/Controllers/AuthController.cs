@@ -30,6 +30,12 @@ namespace RPGManager.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
+            // Walidacja roli
+            if (userDto.Role != "GM" && userDto.Role != "Player")
+            {
+                return BadRequest("Rola musi być 'GM' lub 'Player'.");
+            }
+
             var user = new Users
             {
                 UserName = userDto.Login,
@@ -43,6 +49,9 @@ namespace RPGManager.API.Controllers
             {
                 return BadRequest(result.Errors);
             }
+
+            // Dodanie użytkownika do roli
+            //await _userManager.AddToRoleAsync(user, userDto.Role);
 
             return Ok("User registered successfully.");
         }

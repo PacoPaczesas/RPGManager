@@ -3,6 +3,7 @@ using RPGManager.WarstwaWprowadzania.Data;
 
 namespace RPGManager.WarstwaWprowadzania.Validators
 {
+    // sprawdzić gdzie dokłądnie jest wykorzystywany i zamienic goods na goodsDto
     public class GoodsValidator : IValidator<Goods>
     {
         public Result<Goods> Validate(Goods goods)

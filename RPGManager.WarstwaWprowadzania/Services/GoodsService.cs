@@ -32,6 +32,7 @@ namespace RPGManager.WarstwaWprowadzania.Services
             };
 
             goodsValidator = _goodsValidator.Validate(goods);
+            // validator dla goodsDto
 
             if (goodsValidator.IsSuccessful)
             {
@@ -64,7 +65,7 @@ namespace RPGManager.WarstwaWprowadzania.Services
             return true;
         }
 
-        public async Task<Goods> DeleteGoodsAsync(int id)
+        public async Task<Goods?> DeleteGoodsAsync(int id)
         {
             var goods = await _context.Goods.FindAsync(id);
             if (goods == null)

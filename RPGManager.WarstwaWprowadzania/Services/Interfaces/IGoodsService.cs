@@ -10,7 +10,7 @@ namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
         Task<Result<Goods>> AddNewGoodsAsync(GoodsDto goodsDto);
         Task<IEnumerable<Goods>> GetGoodsAsync();
         Task<bool> AssignGoodsToCountryAsync(int countryId, int goodId);
-        Task<Goods> DeleteGoodsAsync(int id);
+        Task<Goods?> DeleteGoodsAsync(int id);
         Task<bool> RemoveGoodsFromCountryAsync(int countryId, int goodsId);
     }
 }

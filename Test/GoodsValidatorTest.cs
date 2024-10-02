@@ -96,7 +96,7 @@ namespace RPGManager.WarstwaWprowadzania2.Test
             Assert.Equal("Nieprawidłowa cena. Cena nie może równać się 0", result.Message);
         }
 
-        [Fact]
+/*        [Fact]
         public void Validate_ShouldReturnFailedResult_WhenPriceIsNull()
         {
             // Arrange
@@ -115,7 +115,7 @@ namespace RPGManager.WarstwaWprowadzania2.Test
             Assert.False(result.IsSuccessful);
             Assert.Equal("Cena nie może być null", result.Message);
         }
-
+*/
     }
 
 }

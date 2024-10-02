@@ -24,114 +24,114 @@ namespace RPGManager.WarstwaWprowadzania.Test
 {
     public class GoodsServiceTest
     {
-/*        [Fact]
-        public async Task IsAddCountryWorkingRight()
-        {
-            //Arrange
-            var validatorMock = new Mock<IValidator<Country>>();
-            validatorMock
-                .Setup(validator => validator.Validate(It.IsAny<Country>()))
-                .Returns(() => new Result<Country> { IsSuccessful = true });
+        /*        [Fact]
+                public async Task IsAddCountryWorkingRight()
+                {
+                    //Arrange
+                    var validatorMock = new Mock<IValidator<Country>>();
+                    validatorMock
+                        .Setup(validator => validator.Validate(It.IsAny<Country>()))
+                        .Returns(() => new Result<Country> { IsSuccessful = true });
 
-            var dataContextMock = new Mock<IDataContext>();
-            dataContextMock.Setup(context => context.Countries.AddAsync(It.IsAny<Country>(), It.IsAny<CancellationToken>()))
-                .Returns(() => new ValueTask<EntityEntry<Country>>());
+                    var dataContextMock = new Mock<IDataContext>();
+                    dataContextMock.Setup(context => context.Countries.AddAsync(It.IsAny<Country>(), It.IsAny<CancellationToken>()))
+                        .Returns(() => new ValueTask<EntityEntry<Country>>());
 
-            var service = new CountryService(dataContextMock.Object, validatorMock.Object);
+                    var service = new CountryService(dataContextMock.Object, validatorMock.Object);
 
-            //Act
-            var result = await service.AddCountryAsync(new CountryDto()
-            {
-                Name = "test",
-                Capital = "TestCapital"
-            });
+                    //Act
+                    var result = await service.AddCountryAsync(new CountryDto()
+                    {
+                        Name = "test",
+                        Capital = "TestCapital"
+                    });
 
-            //Assert
-            result.Should().NotBeNull();
-            result.IsSuccessful.Should().BeTrue();
-            dataContextMock.Verify(context => context.SaveChanges(), Times.Exactly(1));
-        }
+                    //Assert
+                    result.Should().NotBeNull();
+                    result.IsSuccessful.Should().BeTrue();
+                    dataContextMock.Verify(context => context.SaveChanges(), Times.Exactly(1));
+                }
 
-        //czy walidacja nie przejdzie dla kraju bez nazwy
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
+                //czy walidacja nie przejdzie dla kraju bez nazwy
+                [Theory]
+                [InlineData(null)]
+                [InlineData("")]
+                [InlineData(" ")]
 
-        public async Task AddCountryWithEmptyName(string nameToTest)
-        {
-            // Arrange
-            var validatorMock = new Mock<IValidator<Country>>();
-            validatorMock
-                .Setup(validator => validator.Validate(It.IsAny<Country>()))
-                .Returns(() => new Result<Country> { IsSuccessful = false, Message = "Brak nazwy kraju" });
+                public async Task AddCountryWithEmptyName(string nameToTest)
+                {
+                    // Arrange
+                    var validatorMock = new Mock<IValidator<Country>>();
+                    validatorMock
+                        .Setup(validator => validator.Validate(It.IsAny<Country>()))
+                        .Returns(() => new Result<Country> { IsSuccessful = false, Message = "Brak nazwy kraju" });
 
-            var dataContextMock = new Mock<IDataContext>();
-            var service = new CountryService(dataContextMock.Object, validatorMock.Object);
+                    var dataContextMock = new Mock<IDataContext>();
+                    var service = new CountryService(dataContextMock.Object, validatorMock.Object);
 
-            // Act
-            var result = await service.AddCountryAsync(new CountryDto
-            {
-                Name = nameToTest,
-                Capital = "TestCapital"
-            });
+                    // Act
+                    var result = await service.AddCountryAsync(new CountryDto
+                    {
+                        Name = nameToTest,
+                        Capital = "TestCapital"
+                    });
 
-            // Assert
-            result.Should().NotBeNull();
-            result.IsSuccessful.Should().BeFalse();
-            result.Message.Should().Be("Brak nazwy kraju");
-            dataContextMock.Verify(context => context.SaveChanges(), Times.Never());
-        }
+                    // Assert
+                    result.Should().NotBeNull();
+                    result.IsSuccessful.Should().BeFalse();
+                    result.Message.Should().Be("Brak nazwy kraju");
+                    dataContextMock.Verify(context => context.SaveChanges(), Times.Never());
+                }
 
-        //czy walidacja nie przejdzie dla kraju bez nazwy stolicy
-        [Fact]
-        public async Task AddCountryWithEmptyCapital()
-        {
-            // Arrange
-            var validatorMock = new Mock<IValidator<Country>>();
-            validatorMock
-                .Setup(validator => validator.Validate(It.IsAny<Country>()))
-                .Returns(() => new Result<Country> { IsSuccessful = false, Message = "Brak wprowadzonej nazwy stolicy kraju" });
+                //czy walidacja nie przejdzie dla kraju bez nazwy stolicy
+                [Fact]
+                public async Task AddCountryWithEmptyCapital()
+                {
+                    // Arrange
+                    var validatorMock = new Mock<IValidator<Country>>();
+                    validatorMock
+                        .Setup(validator => validator.Validate(It.IsAny<Country>()))
+                        .Returns(() => new Result<Country> { IsSuccessful = false, Message = "Brak wprowadzonej nazwy stolicy kraju" });
 
-            var dataContextMock = new Mock<IDataContext>();
-            var service = new CountryService(dataContextMock.Object, validatorMock.Object);
+                    var dataContextMock = new Mock<IDataContext>();
+                    var service = new CountryService(dataContextMock.Object, validatorMock.Object);
 
-            // Act
-            var result = await service.AddCountryAsync(new CountryDto
-            {
-                Name = "CountryName",
-                Capital = ""         
-            });
+                    // Act
+                    var result = await service.AddCountryAsync(new CountryDto
+                    {
+                        Name = "CountryName",
+                        Capital = ""         
+                    });
 
-            // Assert
-            result.Should().NotBeNull();
-            result.IsSuccessful.Should().BeFalse();
-            result.Message.Should().Be("Brak wprowadzonej nazwy stolicy kraju");
-            dataContextMock.Verify(context => context.SaveChanges(), Times.Never());
-        }
+                    // Assert
+                    result.Should().NotBeNull();
+                    result.IsSuccessful.Should().BeFalse();
+                    result.Message.Should().Be("Brak wprowadzonej nazwy stolicy kraju");
+                    dataContextMock.Verify(context => context.SaveChanges(), Times.Never());
+                }
 
-        //czy metoda usuniêcia kraju dzia³a prawid³owo
-        [Fact]
-        public async Task DeleteCountry()
-        {
-            // Arrange
-            var country = new Country { Id = 1, Name = "TestCountry" };
+                //czy metoda usuniêcia kraju dzia³a prawid³owo
+                [Fact]
+                public async Task DeleteCountry()
+                {
+                    // Arrange
+                    var country = new Country { Id = 1, Name = "TestCountry" };
 
-            var dataContextMock = new Mock<IDataContext>();
-            dataContextMock.Setup(context => context.Countries.FindAsync(It.IsAny<int>()))
-                .ReturnsAsync(country);
+                    var dataContextMock = new Mock<IDataContext>();
+                    dataContextMock.Setup(context => context.Countries.FindAsync(It.IsAny<int>()))
+                        .ReturnsAsync(country);
 
-            var service = new CountryService(dataContextMock.Object, Mock.Of<IValidator<Country>>());
+                    var service = new CountryService(dataContextMock.Object, Mock.Of<IValidator<Country>>());
 
-            // Act
-            var result = await service.DeleteCountryAsync(1);
+                    // Act
+                    var result = await service.DeleteCountryAsync(1);
 
-            // Assert
-            result.Should().NotBeNull();
-            result.Id.Should().Be(1);
-            dataContextMock.Verify(context => context.Countries.Remove(It.IsAny<Country>()), Times.Once());
-            dataContextMock.Verify(context => context.SaveChanges(), Times.Once());
-        }*/
+                    // Assert
+                    result.Should().NotBeNull();
+                    result.Id.Should().Be(1);
+                    dataContextMock.Verify(context => context.Countries.Remove(It.IsAny<Country>()), Times.Once());
+                    dataContextMock.Verify(context => context.SaveChanges(), Times.Once());
+                }*/
 
         //1111111111111111111111111111111111111111111111111111111111111111111111111111
 
@@ -159,11 +159,15 @@ namespace RPGManager.WarstwaWprowadzania.Test
 
                 }
         */
-       
+
 
         // !!!!!!!!!!!!!!!!!!!
         // AddNewGoodsAsync()
         // !!!!!!!!!!!!!!!!!!!
+
+        // dla AddNewGoodsAsync powuinny byæ tytlko dwie œcierzki. IsSuccessful true oraz flase. Wszystko inne sprawdzane bêdzie przy validatorze
+
+
 
         [Theory]
         [InlineData(null)]
@@ -447,7 +451,6 @@ namespace RPGManager.WarstwaWprowadzania.Test
 
             // Assert
             result.Should().BeNull(); // Powinno zwróciæ null
-            result.Should().Be(null);
             dataContextMock.Verify(context => context.Goods.Remove(It.IsAny<Goods>()), Times.Never()); // Nie powinno nic usun¹æ
             dataContextMock.Verify(context => context.SaveChanges(), Times.Never()); // Nie powinno zapisywaæ zmian
         }
@@ -460,8 +463,67 @@ namespace RPGManager.WarstwaWprowadzania.Test
 
 
 
+        [Fact]
+        public async Task RemoveGoodsFromCountryAsync_ShouldReturnFalse_WhenCountryGoodsNotFound()
+        {
+            // Arrange
+            int countryId = 1;
+            int goodsId = 1;
 
 
+
+            var mockContext = new Mock<IDataContext>();
+            //var mockCountryGoods = new Mock<DbSet<CountryGoods>>();
+
+            // Mocking FirstOrDefaultAsync to return null (CountryGoods not found)
+            mockContext.Setup(context => context.CountryGoods.FirstOrDefaultAsync(cg => cg.CountryId == countryId && cg.GoodsId == goodsId, default))
+                .ReturnsAsync((CountryGoods?)null);
+
+            // Mocking DbSet
+            //mockContext.Setup(c => c.CountryGoods).Returns(mockCountryGoods.Object);
+
+            var service = new GoodsService(mockContext.Object, Mock.Of<IValidator<Goods>>());
+
+            // Act
+            var result = await service.RemoveGoodsFromCountryAsync(countryId, goodsId);
+
+            // Assert
+            Assert.False(result);
+            mockContext.Verify(c => c.CountryGoods.Remove(It.IsAny<CountryGoods>()), Times.Never);
+            mockContext.Verify(c => c.SaveChanges(), Times.Never);
+        }
+        [Fact]
+        public async Task RemoveGoodsFromCountryAsync_ShouldReturnFalse_WhenCountryGoodsNotFound2()
+        {
+            // Arrange
+            int countryId = 1;
+            int goodsId = 1;
+
+            // Tworzymy pust¹ listê dla DbSet<CountryGoods>
+            var mockCountryGoodsData = new List<CountryGoods>().AsQueryable();
+
+            // Tworzymy mocka DbSet<CountryGoods>
+            var mockCountryGoodsSet = new Mock<DbSet<CountryGoods>>();
+
+            // Konfiguracja mocka DbSet, aby zachowywa³ siê jak IQueryable
+            mockCountryGoodsSet.As<IQueryable<CountryGoods>>().Setup(m => m.Provider).Returns(mockCountryGoodsData.Provider);
+            mockCountryGoodsSet.As<IQueryable<CountryGoods>>().Setup(m => m.Expression).Returns(mockCountryGoodsData.Expression);
+            mockCountryGoodsSet.As<IQueryable<CountryGoods>>().Setup(m => m.ElementType).Returns(mockCountryGoodsData.ElementType);
+            mockCountryGoodsSet.As<IQueryable<CountryGoods>>().Setup(m => m.GetEnumerator()).Returns(mockCountryGoodsData.GetEnumerator());
+
+            var mockContext = new Mock<IDataContext>();
+            mockContext.Setup(c => c.CountryGoods).Returns(mockCountryGoodsSet.Object);
+
+            var service = new GoodsService(mockContext.Object, Mock.Of<IValidator<Goods>>());
+
+            // Act
+            var result = await service.RemoveGoodsFromCountryAsync(countryId, goodsId);
+
+            // Assert
+            Assert.False(result);
+            mockContext.Verify(c => c.CountryGoods.Remove(It.IsAny<CountryGoods>()), Times.Never);
+            mockContext.Verify(c => c.SaveChanges(), Times.Never);
+        }
 
 
     }

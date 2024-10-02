@@ -41,6 +41,7 @@ namespace RPGManager.WarstwaWprowadzania.Services
             return goodsValidator;
         }
 
+        // to nie jest chyba dobrze zrobione???
         public async Task<IEnumerable<Goods>> GetGoodsAsync()
         {
             return await _context.Goods.ToListAsync();

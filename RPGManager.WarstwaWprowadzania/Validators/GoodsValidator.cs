@@ -24,6 +24,16 @@ namespace RPGManager.WarstwaWprowadzania.Validators
                 goodsValidator.IsSuccessful = false;
                 goodsValidator.Message = "Nieprawidłowa cena towaru";
             }
+            if (goods.Price == 0)
+            {
+                goodsValidator.IsSuccessful = false;
+                goodsValidator.Message = "Nieprawidłowa cena. Cena nie może równać się 0";
+            }
+            if (goods.Price == null)
+            {
+                goodsValidator.IsSuccessful = false;
+                goodsValidator.Message = "Cena nie może być null";
+            }
 
             return goodsValidator;
         }

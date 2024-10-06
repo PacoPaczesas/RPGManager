@@ -13,33 +13,32 @@ namespace RPGManager.WarstwaWprowadzania.Services
     public class GoodsService : IGoodsService
     {
         private readonly IDataContext _context;
-        private readonly IValidator<Goods> _goodsValidator;
+        private readonly IValidator<GoodsDto> _goodsDtoValidator;
 
-        public GoodsService(IDataContext context, IValidator<Goods> goodsValidator)
+        public GoodsService(IDataContext context, IValidator<GoodsDto> goodsDtoValidator)
         {
             _context = context;
-            _goodsValidator = goodsValidator;
+            _goodsDtoValidator = goodsDtoValidator;
         }
 
-        public async Task<Result<Goods>> AddNewGoodsAsync(GoodsDto goodsDto)
+        public async Task<Result<GoodsDto>> AddNewGoodsAsync(GoodsDto goodsDto)
         {
-            Result<Goods> goodsValidator = new Result<Goods>();
+            Result<GoodsDto> goodsDtoValidator = new Result<GoodsDto>();
+            goodsDtoValidator = _goodsDtoValidator.Validate(goodsDto);
 
-            var goods = new Goods()
+            if (goodsDtoValidator.IsSuccessful)
             {
-                Name = goodsDto.Name,
-                Price = goodsDto.Price
-            };
+                //TODO: Wcześniej przygotowałem walidacje dla goodsDto/
+                var goods = new Goods()
+                {
+                    Name = goodsDto.Name,
+                    Price = goodsDto.Price
+                };
 
-            goodsValidator = _goodsValidator.Validate(goods);
-            // validator dla goodsDto
-
-            if (goodsValidator.IsSuccessful)
-            {
                 await _context.Goods.AddAsync(goods);
                 _context.SaveChanges();
             }
-            return goodsValidator;
+            return goodsDtoValidator;
         }
 
         // to nie jest chyba dobrze zrobione???

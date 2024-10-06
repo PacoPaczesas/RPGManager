@@ -7,7 +7,7 @@ namespace RPGManager.WarstwaWprowadzania.Services.Interfaces
 {
     public interface IGoodsService
     {
-        Task<Result<Goods>> AddNewGoodsAsync(GoodsDto goodsDto);
+        Task<Result<GoodsDto>> AddNewGoodsAsync(GoodsDto goodsDto);
         Task<IEnumerable<Goods>> GetGoodsAsync();
         Task<bool> AssignGoodsToCountryAsync(int countryId, int goodId);
         Task<Goods?> DeleteGoodsAsync(int id);

@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using RPGManager.WarstwaInfrastruktury.Data;
+using RPGManager.WarstwaWprowadzania.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,7 @@ builder.Services.AddTransient<IValidator<Country>, CountryValidator>();
 builder.Services.AddTransient<IValidator<Note>, NoteValidator>();
 builder.Services.AddTransient<IValidator<Goods>, GoodsValidator>();
 builder.Services.AddTransient<IValidator<Users>, UserValidator>();
+builder.Services.AddTransient<IValidator<GoodsDto>, GoodsDtoValidator>();
 
 // Register IDataContext as a service
 builder.Services.AddScoped<IDataContext, DataContext>();
